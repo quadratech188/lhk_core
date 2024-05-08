@@ -21,11 +21,23 @@
   <ItemGroup>
     <ClCompile Include="src\KeyboardHook.cpp" />
     <ClCompile Include="src\KeyboardHookLua.cpp" />
+    <ClCompile Include="src\LuaEnvironment.cpp" />
     <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Definitions.h" />
     <ClInclude Include="src\KeyboardHook.h" />
     <ClInclude Include="src\KeyboardHookLua.h" />
+    <ClInclude Include="src\LuaEnvironment.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".clangd" />
+    <None Include=".gitignore" />
+    <None Include="lua-5.1.5_Win64_dll17_lib\lua5.1.dll" />
+    <None Include="src\lua\KeyboardHook.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lua-5.1.5_Win64_dll17_lib\lua5.1.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -82,6 +94,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\bin\temp\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\lua-5.1.5_Win64_dll17_lib\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)\lua-5.1.5_Win64_dll17_lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,7 +140,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lua-5.1.5_Win64_dll17_lib</AdditionalLibraryDirectories>
       <PerUserRedirection>true</PerUserRedirection>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies); lua5.1.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);lua5.1.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy $(ProjectDir)\lua-5.1.5_Win64_dll17_lib\lua5.1.dll $(OutDir)\lua5.1.dll</Command>
@@ -134,6 +148,10 @@
     <PostBuildEvent>
       <Message>Paste lua5.1.dll to the output dir</Message>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

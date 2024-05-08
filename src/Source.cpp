@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include "KeyboardHook.h"
+#include "KeyboardHookLua.h"
 #include <stdio.h>
 #include <io.h>
 
@@ -16,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     int nCmdShow) {
 
     // Set up KeyboardHook
-    Keyboard::KeyboardHook::hook();
+    KeyboardHook::hook();
 
     WNDCLASSEX wcex;
 

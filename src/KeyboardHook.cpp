@@ -1,8 +1,11 @@
 #include <windows.h>
-#include "KeyboardHook.h"
 #include <stdio.h>
+#include <list>
 
-namespace Keyboard::KeyboardHook {
+#include "KeyboardHookLua.h"
+#include "KeyboardHook.h"
+
+namespace KeyboardHook {
 	bool hook() {
 		SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, GetModuleHandle(NULL), 0);
 		return true;
@@ -12,7 +15,6 @@ namespace Keyboard::KeyboardHook {
 		if (nCode < 0) {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);
 		}
-		printf("sdf");
 		return 0;
 	}
 }

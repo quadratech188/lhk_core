@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-IC:/Programming/LuaHotKey/lua-5.1.5_Win64_dll17_lib/include, -std=c++20]
