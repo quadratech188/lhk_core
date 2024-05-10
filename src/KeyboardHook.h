@@ -1,5 +1,8 @@
-#include <list>
 #include <windows.h>
+#include <stdio.h>
+#include <list>
+
+#include "KeyboardHookLua.h"
 
 namespace KeyboardHook {
 	bool hook();

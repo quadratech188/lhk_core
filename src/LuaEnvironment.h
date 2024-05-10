@@ -1,3 +1,5 @@
+#include <stdexcept>
+#include <format>
 #include "lua.hpp"
 
 namespace LuaEnv {

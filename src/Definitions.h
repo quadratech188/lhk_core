@@ -1,3 +1,2 @@
-#define LUA_NEWUSERDATA(T, L) *(T*)lua_newuserdata(L, sizeof(T))
-#define LUA_TOUSERDATA(T, L, i) *(T*)lua_touserdata(L, i)
-
+#define LUA_NEWUSERDATA(type, L) (type*)lua_newuserdata(L, sizeof(type))
+#define LUA_CHECKUSERDATA(type, L, index, typeName) (type*)luaL_checkudata(L, index, typeName)

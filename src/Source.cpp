@@ -6,7 +6,7 @@
 #include <io.h>
 
 static TCHAR szWindowClass[] = _T("DesktopApp");
-static TCHAR szTitle[] = _T("Windows Desktop tutorial");
+static TCHAR szTitle[] = _T("LuaHotKey test window");
 
 //Forward declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
