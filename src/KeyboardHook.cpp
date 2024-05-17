@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <stdio.h>
-#include <list>
 
 #include "KeyboardHookLua.h"
 #include "KeyboardHook.h"
