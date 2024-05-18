@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include "lua.hpp"
 
 #include "pch.h"
@@ -9,11 +10,11 @@ namespace Utils {
 	void runText(lua_State* L, const char* text) {
 		int err = luaL_loadstring(L, text);
 		if (err != 0) {
-			throw std::exception(lua_tostring(L, -1));
+			throw std::runtime_error(lua_tostring(L, -1));
 		}
 		err = lua_pcall(L, 0, 0, 0);
 		if (err != 0) {
-			throw std::exception(lua_tostring(L, -1));
+			throw std::runtime_error(lua_tostring(L, -1));
 		}
 	}
 	int debugPrint(lua_State* L) {

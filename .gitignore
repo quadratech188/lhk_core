@@ -1,5 +1,6 @@
+.cache
 .vs
 .user
-bin/
-build/
+**/bin
+**/build
 
