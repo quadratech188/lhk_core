@@ -1,7 +1,6 @@
 #include <windows.h>
 #include <tchar.h>
 #include "KeyboardHook.h"
-#include "KeyboardHookLua.h"
 #include <stdio.h>
 #include <io.h>
 

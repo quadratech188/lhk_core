@@ -1,8 +1,11 @@
+#pragma once
+
 #include <windows.h>
 #include <stdio.h>
-#include <list>
+#include <winuser.h>
 
-#include "KeyboardHookLua.h"
+#include "KeyboardSubHook.h"
+#include "KeyboardStroke.h"
 
 namespace KeyboardHook {
 	bool hook();

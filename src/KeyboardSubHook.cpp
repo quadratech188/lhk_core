@@ -1,27 +1,24 @@
 #include "lua.hpp"
 
 #include <string>
+#include <list>
 
-#include "KeyboardHookLua.h"
+#include "KeyboardSubHook.h"
 #include "Definitions.h"
 
-namespace KeyboardHook {
+namespace KeyboardSubHook {
 	// Constants
 	const char* userdataName = "KeyboardSubHook";
 	const char* metatableName = "lhk.KeyboardSubHook";
 
-	struct KeyboardSubHook {
-		int condition; // Stored as lua references
-		int callback;
+	std::list<SubHook> subHooks;
+
+	const luaL_Reg luaFunctions[] = {
+		{"new", newUserdata},
+		{nullptr, nullptr}
 	};
 
-	SUBHOOKS subHooks;
-
-	static const luaL_Reg luaFunctions[] = {
-		*new luaL_Reg {"new", newUserdata}
-	};
-
-	static const luaL_Reg luaMembers[] = {
+	const luaL_Reg luaMembers[] = {
 		{"__newindex", set},
 		{"__index", get},
 		{nullptr, nullptr}
@@ -34,7 +31,7 @@ namespace KeyboardHook {
 	}
 
 	int set(lua_State* L) {
-		KeyboardSubHook* keyboardSubHook = LUA_CHECKUSERDATA(KeyboardSubHook, L, 1, metatableName);
+		SubHook* keyboardSubHook = *LUA_CHECKUSERDATA(SubHook*, L, 1, metatableName);
 		const char* index = luaL_checkstring(L, 2);
 
 		if (index == std::string("condition")) {
@@ -51,7 +48,7 @@ namespace KeyboardHook {
 		return 0;
 	}
 	int get(lua_State* L) {
-		KeyboardSubHook* keyboardSubHook = LUA_CHECKUSERDATA(KeyboardSubHook, L, 1, metatableName);
+		SubHook* keyboardSubHook = *LUA_CHECKUSERDATA(SubHook*, L, 1, metatableName);
 		const char* index = luaL_checkstring(L, 2);
 		lua_pop(L, 0);
 		if (index == std::string("condition")) {
@@ -67,15 +64,22 @@ namespace KeyboardHook {
 	}
 	
 	int newUserdata(lua_State* L) {
-		KeyboardSubHook* userdataPtr = LUA_NEWUSERDATA(KeyboardSubHook, L);
+		SubHook** userdataPtr = LUA_NEWUSERDATA(SubHook*, L);
 		lua_pushvalue(L, 1);
-		userdataPtr->condition = luaL_ref(L, LUA_REGISTRYINDEX);
+	
+		SubHook subHook;
+		subHook.condition = luaL_ref(L, LUA_REGISTRYINDEX);
 
 		lua_pushvalue(L, 2);
-		userdataPtr->callback = luaL_ref(L, LUA_REGISTRYINDEX);
+		subHook.callback = luaL_ref(L, LUA_REGISTRYINDEX);
 
 		luaL_getmetatable(L, metatableName);
 		lua_setmetatable(L, -2);
+
+		subHooks.push_back(subHook);
+
+		*userdataPtr = &subHooks.back();
+
 		return 1;
 	}
 }

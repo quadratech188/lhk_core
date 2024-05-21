@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -15,8 +14,10 @@ set(LibSourceFiles
 	"src/Definitions.h"
 	"src/KeyboardHook.cpp"
 	"src/KeyboardHook.h"
-	"src/KeyboardHookLua.cpp"
-	"src/KeyboardHookLua.h"
+	"src/KeyboardStroke.cpp"
+	"src/KeyboardStroke.h"
+	"src/KeyboardSubHook.cpp"
+	"src/KeyboardSubHook.h"
 	"src/LuaEnvironment.cpp"
 	"src/LuaEnvironment.h"
 	"src/Source.cpp"
@@ -48,3 +49,4 @@ add_custom_command(
 	        ${LuaDirectory}/lua5.1.dll
 			${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/lua5.1.dll
 	)
+

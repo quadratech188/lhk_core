@@ -1,7 +1,9 @@
 #include <windows.h>
 #include <stdio.h>
+#include <winuser.h>
 
-#include "KeyboardHookLua.h"
+#include "KeyboardSubHook.h"
+#include "KeyboardStroke.h"
 #include "KeyboardHook.h"
 
 namespace KeyboardHook {
@@ -14,6 +16,17 @@ namespace KeyboardHook {
 		if (nCode < 0) {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);
 		}
+		
+		KBDLLHOOKSTRUCT strokeInfo = *(KBDLLHOOKSTRUCT*)lParam;
+		
+		KeyboardStroke::KeyStroke stroke;
+
+		stroke.vkCode = strokeInfo.vkCode;
+		stroke.scanCode = strokeInfo.scanCode;
+				
+		
 		return 0;
 	}
+
+	
 }

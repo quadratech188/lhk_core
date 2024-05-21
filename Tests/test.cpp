@@ -3,7 +3,8 @@
 #include "lua.hpp"
 
 #include "pch.h"
-#include "KeyboardHookLua.h"
+#include "KeyboardSubHook.h"
+#include "KeyboardStroke.h"
 
 namespace Utils {
 	const char* lastMessage;
@@ -24,14 +25,47 @@ namespace Utils {
 		return 0;
 	}
 }
-namespace KeyboardHook {
+
+namespace KeyboardStroke {
+	class KeyboardStrokeTest: public testing::Test {
+	protected:
+		lua_State* L;
+		KeyboardStrokeTest() {
+			L = luaL_newstate();
+			luaL_openlibs(L);
+			KeyboardStroke::open(L);
+			lua_register(L, "debugPrint", Utils::debugPrint);
+		}
+	};
+	
+	TEST_F(KeyboardStrokeTest, SanityCheck) {
+		Utils::runText(L, R"ESCAPESEQUENCE(
+k = KeyStroke.new(24, nil, true)
+
+if (k.vkCode ~= 24) then
+	print("Incorrect vkCode: expected 24, got " .. k.vkCode)
+	return
+end
+
+if (k.stroke ~= true) then
+	print("Incorrect stroke: expected true, got " .. k.stroke)
+	return
+end
+
+debugPrint("Test Successful")
+		)ESCAPESEQUENCE");
+		EXPECT_EQ(Utils::lastMessage, std::string("Test Successful"));
+	}
+}
+
+namespace KeyboardSubHook {
 	class KeyboardHookTest : public testing::Test {
 	protected:
 		lua_State* L;
 		KeyboardHookTest() {
 			L = luaL_newstate();
 			luaL_openlibs(L);
-			KeyboardHook::open(L);
+			KeyboardSubHook::open(L);
 			lua_register(L, "debugPrint", Utils::debugPrint);
 		}
 	};
