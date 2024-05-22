@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
 #include "KeyboardHook.h"
+#include "LuaEnvironment.h"
 #include <stdio.h>
 #include <io.h>
 
@@ -100,6 +101,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
     }
 
     return (int)msg.wParam;
+}
+
+void initLua() {
+	LuaEnv::init();
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

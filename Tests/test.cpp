@@ -1,10 +1,13 @@
 #include <iostream>
 #include <stdexcept>
+#include <windows.h>
+#include "KeyboardHook.h"
 #include "lua.hpp"
 
 #include "pch.h"
 #include "KeyboardSubHook.h"
 #include "KeyboardStroke.h"
+#include "LuaEnvironment.h"
 
 namespace Utils {
 	const char* lastMessage;
@@ -78,6 +81,30 @@ a = k.condition
 debugPrint(a())
 )ESCAPESEQUENCE");
 		EXPECT_EQ(Utils::lastMessage, std::string("debugPrint"));
+	}
+}
+
+namespace HookCallbackTest {
+	class KeyboardTest: public testing::Test {
+	protected:
+		
+		KBDLLHOOKSTRUCT spoofedHookInfo = KBDLLHOOKSTRUCT {123, 456, 1, 78, NULL};
+
+		KeyboardTest() {
+			LuaEnv::init();
+			KeyboardSubHook::open(LuaEnv::L);
+		}
+	};
+
+	TEST_F(KeyboardTest, SanityCheck) {
+		Utils::runText(LuaEnv::L, R"ESCAPESEQUENCE(
+k = KeyboardSubHook.new()
+k.callback = function(keyStroke) debugPrint(tostring(keyStroke)) return end
+		)ESCAPESEQUENCE");
+
+		KeyboardHook::hookProc(0, WM_KEYDOWN, (LPARAM)&spoofedHookInfo);
+
+		EXPECT_EQ(Utils::lastMessage, std::string("123"));
 	}
 }
 

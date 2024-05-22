@@ -20,4 +20,5 @@ namespace KeyboardStroke {
 	int set(lua_State* L);
 	int get(lua_State* L);
 	int newUserdata(lua_State* L);
+	int newUserdata(lua_State* L, WPARAM wParam, LPARAM lParam);
 }

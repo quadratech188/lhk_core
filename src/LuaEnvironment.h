@@ -5,5 +5,8 @@
 #include "lua.hpp"
 
 namespace LuaEnv {
-	void runFile(lua_State* L, const char* filename);
+	extern lua_State* L;
+
+	void init();
+	void runFile(const char* filename);
 }

@@ -7,11 +7,12 @@
 #include "Definitions.h"
 
 namespace KeyboardSubHook {
-
 	struct SubHook {
 		int condition;
 		int callback;
 	};
+
+	extern std::list<SubHook> subHooks;
 
 	void open(lua_State* L);
 	int set(lua_State* L);

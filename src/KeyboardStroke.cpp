@@ -92,6 +92,18 @@ namespace KeyboardStroke {
 		return 1;
 	}
 
+	int newUserdata(lua_State* L, WPARAM wParam, LPARAM lParam) {
+		KeyStroke* userdataPtr = LUA_NEWUSERDATA(KeyStroke, L);
+
+		*userdataPtr = KeyStroke(wParam, lParam);
+
+		luaL_getmetatable(L, metatableName);
+		lua_setmetatable(L, -2);
+
+		return 1;
+
+	}
+
 	KeyStroke::KeyStroke(): vkCode(0), scanCode(0), stroke(FALSE) {};
 
 	KeyStroke::KeyStroke(WPARAM wParam, LPARAM lParam) {
