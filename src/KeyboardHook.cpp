@@ -1,15 +1,14 @@
 #include <windows.h>
 #include <iostream>
-#include <winuser.h>
 
 #include "Definitions.h"
 #include "KeyboardSubHook.h"
-#include "KeyboardStroke.h"
+#include "KeyStroke.h"
 #include "LuaEnvironment.h"
 #include "lua.h"
 #include "KeyboardHook.h"
 
-using namespace KeyboardStroke;
+using namespace KeyStroke;
 
 namespace KeyboardHook {
 	bool hook() {
@@ -22,16 +21,18 @@ namespace KeyboardHook {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);
 		}
 		
-		KeyStroke keyStroke = KeyStroke(wParam, lParam);
+		KeyStrokeUdata keyStroke = KeyStrokeUdata(wParam, lParam);
 
 		for (const auto& it: KeyboardSubHook::subHooks) {
-			lua_pushvalue(LuaEnv::L, it.callback);
-			*LUA_NEWUSERDATA(KeyStroke, LuaEnv::L) = keyStroke;
+			lua_rawgeti(LuaEnv::L, LUA_REGISTRYINDEX, it.callback);
+			KeyStroke::newUserdata(LuaEnv::L, keyStroke);
 			int err = lua_pcall(LuaEnv::L, 1, 0, 0);
+
+			if (err != 0) {
+				std::cout << lua_tostring(LuaEnv::L, -1) << std::endl;
+			}
 		}
 
 		return 0;
 	}
-
-	
 }

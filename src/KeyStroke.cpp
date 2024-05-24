@@ -1,17 +1,15 @@
 #include <string>
-#include <unordered_map>
 
-#include <minwindef.h>
 #include <windows.h>
-#include <winuser.h>
 
 #include <lua.hpp>
 
-#include "KeyboardStroke.h"
+#include "KeyStroke.h"
 #include "Definitions.h"
+#include "lauxlib.h"
 #include "lua.h"
 
-namespace KeyboardStroke {
+namespace KeyStroke {
 	const char* userdataName = "KeyStroke";
 	const char* metatableName = "lhk.KeyStroke";
 
@@ -33,7 +31,7 @@ namespace KeyboardStroke {
 	}
 
 	int set(lua_State* L) {
-		KeyStroke* keyStroke = LUA_CHECKUSERDATA(KeyStroke, L, 1, metatableName);
+		KeyStrokeUdata* keyStroke = LUA_CHECKUSERDATA(KeyStrokeUdata, L, 1, metatableName);
 		std::string index = std::string(luaL_checkstring(L, 2));
 
 		if (index == "vkCode") {
@@ -53,7 +51,7 @@ namespace KeyboardStroke {
 
 
 	int get(lua_State* L) {
-		KeyStroke* keyStroke = LUA_CHECKUSERDATA(KeyStroke, L, 1, metatableName);
+		KeyStrokeUdata* keyStroke = LUA_CHECKUSERDATA(KeyStrokeUdata, L, 1, metatableName);
 		std::string index = std::string(luaL_checkstring(L, 2));
 
 		if (index == "vkCode") {
@@ -72,7 +70,7 @@ namespace KeyboardStroke {
 	}
 
 	int newUserdata(lua_State* L) {
-		KeyStroke keyStroke;
+		KeyStrokeUdata keyStroke;
 
 		int numArgs = lua_gettop(L);
 		
@@ -82,7 +80,7 @@ namespace KeyboardStroke {
 
 		keyStroke.stroke = numArgs >= 3? lua_toboolean(L, 3): STROKEDOWN;
 
-		KeyStroke* userdataPtr = LUA_NEWUSERDATA(KeyStroke, L);
+		KeyStrokeUdata* userdataPtr = LUA_NEWUSERDATA(KeyStrokeUdata, L);
 
 		*userdataPtr = keyStroke;
 
@@ -93,9 +91,9 @@ namespace KeyboardStroke {
 	}
 
 	int newUserdata(lua_State* L, WPARAM wParam, LPARAM lParam) {
-		KeyStroke* userdataPtr = LUA_NEWUSERDATA(KeyStroke, L);
+		KeyStrokeUdata* userdataPtr = LUA_NEWUSERDATA(KeyStrokeUdata, L);
 
-		*userdataPtr = KeyStroke(wParam, lParam);
+		*userdataPtr = KeyStrokeUdata(wParam, lParam);
 
 		luaL_getmetatable(L, metatableName);
 		lua_setmetatable(L, -2);
@@ -104,25 +102,32 @@ namespace KeyboardStroke {
 
 	}
 
-	KeyStroke::KeyStroke(): vkCode(0), scanCode(0), stroke(FALSE) {};
+	int newUserdata(lua_State* L, KeyStrokeUdata keyStroke) {
+		*LUA_NEWUSERDATA(KeyStrokeUdata, L) = keyStroke;
 
-	KeyStroke::KeyStroke(WPARAM wParam, LPARAM lParam) {
+		luaL_getmetatable(L, metatableName);
+		lua_setmetatable(L, -2);
+
+		return 1;
+	}
+
+	KeyStrokeUdata::KeyStrokeUdata(): vkCode(0), scanCode(0), stroke(FALSE) {};
+
+	KeyStrokeUdata::KeyStrokeUdata(WPARAM wParam, LPARAM lParam) {
 		KBDLLHOOKSTRUCT strokeInfo = *(KBDLLHOOKSTRUCT*)lParam;
 
-		KeyStroke keyStroke;
 		switch(wParam) {
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
-			keyStroke.stroke = STROKEDOWN;
+			this->stroke = STROKEDOWN;
 			break;
 			
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
-			keyStroke.stroke = STROKEUP;
+			this->stroke = STROKEUP;
 		}
 
-		keyStroke.vkCode = strokeInfo.vkCode;
-		keyStroke.scanCode = strokeInfo.scanCode;
-
+		this->vkCode = strokeInfo.vkCode;
+		this->scanCode = strokeInfo.scanCode;
 	}
 }

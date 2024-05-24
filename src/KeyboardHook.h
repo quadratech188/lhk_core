@@ -5,7 +5,7 @@
 #include <winuser.h>
 
 #include "KeyboardSubHook.h"
-#include "KeyboardStroke.h"
+#include "KeyStroke.h"
 
 namespace KeyboardHook {
 	bool hook();

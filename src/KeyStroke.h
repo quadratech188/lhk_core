@@ -7,13 +7,13 @@ typedef bool STROKE;
 #define STROKEDOWN FALSE;
 #define STROKEUP TRUE;
 
-namespace KeyboardStroke {
-	struct KeyStroke {
+namespace KeyStroke {
+	struct KeyStrokeUdata {
 		DWORD vkCode;
 		DWORD scanCode;
 		STROKE stroke;
-		KeyStroke(WPARAM, LPARAM);
-		KeyStroke();
+		KeyStrokeUdata(WPARAM, LPARAM);
+		KeyStrokeUdata();
 	};
 
 	void open(lua_State* L);
@@ -21,4 +21,5 @@ namespace KeyboardStroke {
 	int get(lua_State* L);
 	int newUserdata(lua_State* L);
 	int newUserdata(lua_State* L, WPARAM wParam, LPARAM lParam);
+	int newUserdata(lua_State* L, KeyStrokeUdata keyStroke);
 }
