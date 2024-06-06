@@ -6,22 +6,20 @@
 
 #include "KeyStroke.h"
 #include "Definitions.h"
-#include "lauxlib.h"
-#include "lua.h"
 
 namespace KeyStroke {
-	const char* userdataName = "KeyStroke";
+	const char* userdataName = "lhk.KeyStroke";
 	const char* metatableName = "lhk.KeyStroke";
 
 	const luaL_Reg luaFunctions[] = {
 		{"new", newUserdata},
-		{nullptr, nullptr}
+		{NULL, NULL}
 	};
 
 	const luaL_Reg luaMembers[] = {
 		{"__newindex", set},
 		{"__index", get},
-		{nullptr, nullptr}
+		{NULL, NULL}
 	};
 
 	void open(lua_State* L) {
@@ -67,6 +65,11 @@ namespace KeyStroke {
 			luaL_argcheck(L, false, 2, "invalid index");
 		}
 		return 1;
+	}
+
+	int toString(lua_State* L) {
+		KeyStrokeUdata* keyStroke = LUA_CHECKUSERDATA(KeyStrokeUdata, L, 1, metatableName);
+		
 	}
 
 	int newUserdata(lua_State* L) {

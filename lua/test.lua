@@ -8,12 +8,13 @@ print(mylib)
 
 print(lhk)
 
-lhk.test()
+k = lhk.KeyboardSubHook.new()
 
-for index, value in ipairs(lhk) do
-	print(index)
+local count = 0
+
+k.callback = function (keyStroke)
+	print(keyStroke.vkCode)
+	print(lhk.Keyboard.getKeyState(0xA0))
 end
 
-for index, value in ipairs(lhk) do
-	print(index)
-end
+lhk.start()

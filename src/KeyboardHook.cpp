@@ -27,10 +27,6 @@ namespace KeyboardHook {
 			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, it.callback);
 			KeyStroke::newUserdata(LuaHotKey::L, keyStroke);
 			int err = lua_pcall(LuaHotKey::L, 1, 0, 0);
-
-			if (err != 0) {
-				std::cout << lua_tostring(LuaHotKey::L, -1) << std::endl;
-			}
 		}
 
 		return 0;

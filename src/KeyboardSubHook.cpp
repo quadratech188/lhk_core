@@ -8,20 +8,20 @@
 
 namespace KeyboardSubHook {
 	// Constants
-	const char* userdataName = "KeyboardSubHook";
+	const char* userdataName = "lhk.KeyboardSubHook";
 	const char* metatableName = "lhk.KeyboardSubHook";
 
 	std::list<SubHook> subHooks;
 
 	const luaL_Reg luaFunctions[] = {
 		{"new", newUserdata},
-		{nullptr, nullptr}
+		{NULL, NULL}
 	};
 
 	const luaL_Reg luaMembers[] = {
 		{"__newindex", set},
 		{"__index", get},
-		{nullptr, nullptr}
+		{NULL, NULL}
 	};
 	
 	void open(lua_State* L) {

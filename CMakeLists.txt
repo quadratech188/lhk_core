@@ -21,6 +21,8 @@ set(LibSourceFiles
 	"src/KeyStroke.h"
 	"src/KeyboardSubHook.cpp"
 	"src/KeyboardSubHook.h"
+	"src/Keyboard.cpp"
+	"src/Keyboard.h"
 	"src/Dll.cpp"
 	"src/Dll.h"
 )
