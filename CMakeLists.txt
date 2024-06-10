@@ -25,6 +25,8 @@ set(LibSourceFiles
 	"src/Keyboard.h"
 	"src/Dll.cpp"
 	"src/Dll.h"
+	"src/AttributeTree.cpp"
+	"src/AttributeTree.h"
 )
 
 set(LuaDirectory "${PROJECT_SOURCE_DIR}/lua-5.1.5_Win64_dll17_lib")
