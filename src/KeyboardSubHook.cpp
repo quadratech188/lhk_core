@@ -5,6 +5,7 @@
 
 #include "KeyboardSubHook.h"
 #include "Definitions.h"
+#include "KeyboardHook.h"
 
 namespace KeyboardSubHook {
 	// Constants
@@ -21,6 +22,7 @@ namespace KeyboardSubHook {
 	const luaL_Reg luaMembers[] = {
 		{"__newindex", set},
 		{"__index", get},
+		{"block", block},
 		{NULL, NULL}
 	};
 	
@@ -61,6 +63,10 @@ namespace KeyboardSubHook {
 			luaL_argcheck(L, false, 2, "Invalid index");
 		}
 		return 1;
+	}
+	int block(lua_State* L) {
+		KeyboardHook::block = lua_gettop(L) == 1? lua_toboolean(L, 1): true;
+		return 0;
 	}
 	
 	int newUserdata(lua_State* L) {
