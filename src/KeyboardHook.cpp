@@ -1,6 +1,5 @@
 #include <windows.h>
 
-#include <iostream>
 #include <winuser.h>
 
 #include "KeyboardSubHook.h"

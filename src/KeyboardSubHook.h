@@ -2,17 +2,15 @@
 #pragma once
 #include "lua.hpp"
 
-#include <list>
-
-#include "Definitions.h"
+#include "AttributeTree.h"
 
 namespace KeyboardSubHook {
+
 	struct SubHook {
-		int condition;
 		int callback;
 	};
-
-	extern std::list<SubHook> subHooks;
+	
+	extern AttributeTree<int> subHooks;
 
 	void open(lua_State* L);
 	int set(lua_State* L);

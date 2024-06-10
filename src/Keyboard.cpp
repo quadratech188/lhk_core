@@ -4,7 +4,7 @@
 #include <winuser.h>
 
 #include "Keyboard.h"
-#include "lua.h"
+#include "AttributeTree.h"
 
 namespace Keyboard {
 	const luaL_Reg luaFunctions[] = {
