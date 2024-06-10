@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Create compile_commands.json (For clangd)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 #set(CMAKE_STATIC_LIBRARY_PREFIX "")
 #set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
@@ -25,6 +27,7 @@ set(LibSourceFiles
 	"src/Keyboard.h"
 	"src/Dll.cpp"
 	"src/Dll.h"
+	"src/AttributeTree.h"
 )
 
 set(LuaDirectory "${PROJECT_SOURCE_DIR}/lua-5.1.5_Win64_dll17_lib")

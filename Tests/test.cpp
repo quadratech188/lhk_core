@@ -2,13 +2,13 @@
 #include <stdexcept>
 #include <windows.h>
 #include <winuser.h>
-#include "KeyboardHook.h"
 #include "lua.hpp"
 
 #include "pch.h"
-#include "KeyboardSubHook.h"
+#include "Dll.h"
 #include "KeyStroke.h"
-#include "LuaEnvironment.h"
+#include "KeyboardHook.h"
+#include "KeyboardSubHook.h"
 
 namespace Utils {
 	const char* lastMessage;
@@ -28,6 +28,11 @@ namespace Utils {
 		lastMessage = str;
 		return 0;
 	}
+	void hookProc(DWORD vkCode, DWORD scanCode, int stroke) {
+		KBDLLHOOKSTRUCT hookInfo = {vkCode, scanCode, 0, 0, NULL};
+		DWORD key = stroke != 0? WM_KEYUP: WM_KEYDOWN;
+		KeyboardHook::hookProc(1, key, (LPARAM)&hookInfo);
+	}
 }
 
 namespace KeyboardStroke {
@@ -44,7 +49,7 @@ namespace KeyboardStroke {
 	
 	TEST_F(KeyboardStrokeTest, SanityCheck) {
 		Utils::runText(L, R"ESCAPESEQUENCE(
-k = KeyStroke.new(24, nil, true)
+k = lhk.KeyStroke.new(24, nil, true)
 
 if (k.vkCode ~= 24) then
 	print("Incorrect vkCode: expected 24, got " .. k.vkCode)
@@ -62,54 +67,41 @@ debugPrint("Test Successful")
 	}
 }
 
-namespace KeyboardSubHook {
-	class KeyboardHookTest : public testing::Test {
+namespace HookCallbackTest {
+	class KeyboardSubHookTest: public testing::Test {
 	protected:
-		lua_State* L;
-		KeyboardHookTest() {
-			L = luaL_newstate();
-			luaL_openlibs(L);
-			KeyboardSubHook::open(L);
-			lua_register(L, "debugPrint", Utils::debugPrint);
-		}
-	};
+		KBDLLHOOKSTRUCT spoofedHookInfo1 = KBDLLHOOKSTRUCT {123, 456, 78, 1, NULL};
 
-	TEST_F(KeyboardHookTest, SanityCheck) {
-		Utils::runText(L, R"ESCAPESEQUENCE(
-k = KeyboardSubHook.new()
-k.condition = function() return "debugPrint" end
-a = k.condition
-debugPrint(a())
-)ESCAPESEQUENCE");
-		EXPECT_EQ(Utils::lastMessage, std::string("debugPrint"));
-	}
+		lua_State* L;
+
+		KeyboardSubHookTest() {
+			L = luaL_newstate();
+			luaopen_LuaHotKey(L);
+			luaL_openlibs(L);
+			
+			lua_register(L, "debugPrint", Utils::debugPrint);
+			Utils::runText(LuaHotKey::L, R"ESCAPESEQUENCE(
+callback = function(keyStroke) debugPrint(tostring(keyStroke.vkCode)) return end
+
+data = {
+	vkCode = nil,
+	scanCode = 456,
+	stroke = true
 }
 
-namespace HookCallbackTest {
-	class KeyboardTest: public testing::Test {
-	protected:
-		KBDLLHOOKSTRUCT spoofedHookInfo = KBDLLHOOKSTRUCT {123, 456, 78, 1, NULL};
-
-		KeyboardTest() {
-			LuaEnv::init();
-
-			lua_register(LuaEnv::L, "debugPrint", Utils::debugPrint);
-
-			KeyboardSubHook::subHooks = {};
+lhk.KeyboardSubHook.register(data, callback)
+		)ESCAPESEQUENCE");
 		}
 	};
 
-	TEST_F(KeyboardTest, SanityCheck) {
-		Utils::runText(LuaEnv::L, R"ESCAPESEQUENCE(
-k = KeyboardSubHook.new()
-k.callback = function(keyStroke) debugPrint(tostring(keyStroke.vkCode)) return end
-		)ESCAPESEQUENCE");
-
-		KeyboardHook::hookProc(2, WM_KEYDOWN, (LPARAM)&spoofedHookInfo);
-
-		std::cout << lua_tostring(LuaEnv::L, -1) << std::endl;
-
+	TEST_F(KeyboardSubHookTest, SanityCheck) {
+		Utils::hookProc(123, 456, 1);
 		EXPECT_EQ(Utils::lastMessage, std::string("123"));
+		Utils::lastMessage = "Blank";
+		Utils::hookProc(234, 456, 0);
+		EXPECT_EQ(Utils::lastMessage, "Blank");
+		Utils::hookProc(345, 456, 1);
+		EXPECT_EQ(Utils::lastMessage, std::string("345"));
 	}
 }
 

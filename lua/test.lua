@@ -1,10 +1,10 @@
-mylib, err = package.loadlib("bin/LuaHotKey.dll", "luaopen_LuaHotKey")
+Mylib, Err = package.loadlib("bin/LuaHotKey.dll", "luaopen_LuaHotKey")
 
-print(err)
+print(Err)
 
-mylib()
+Mylib()
 
-print(mylib)
+print(Mylib)
 
 print(lhk)
 

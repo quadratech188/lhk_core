@@ -24,12 +24,11 @@ namespace LuaHotKey {
 	};
 
 	void open(lua_State* L) {
+		LuaHotKey::L = L;
 		luaL_openlib(L, "lhk", luaFunctions, 0);
 	}
 
 	int start(lua_State* L) {
-		LuaHotKey::L = L;
-
 		KeyboardHook::hook();
 
 		MSG msg;

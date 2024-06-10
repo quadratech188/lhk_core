@@ -1,11 +1,10 @@
 #include <windows.h>
-
-#include <iostream>
 #include <winuser.h>
+
+#include "lua.h"
 
 #include "KeyboardSubHook.h"
 #include "KeyStroke.h"
-#include "lua.h"
 #include "KeyboardHook.h"
 #include "Dll.h"
 
@@ -13,6 +12,7 @@ using namespace KeyStroke;
 
 namespace KeyboardHook {
 	bool block;
+	KeyStrokeUdata keyStroke;
 
 	bool hook() {
 		SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, GetModuleHandle(NULL), 0);
@@ -26,13 +26,13 @@ namespace KeyboardHook {
 
 		block = false;
 		
-		KeyStrokeUdata keyStroke = KeyStrokeUdata(wParam, lParam);
+		keyStroke = KeyStrokeUdata(wParam, lParam);
 
-		for (const auto& it: KeyboardSubHook::subHooks) {
-			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, it.callback);
-			KeyStroke::newUserdata(LuaHotKey::L, keyStroke);
-			int err = lua_pcall(LuaHotKey::L, 1, 0, 0);
-		}
+
+		int indexArray[] = {(int)keyStroke.vkCode, (int)keyStroke.scanCode, keyStroke.stroke + 1};
+
+		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
+
 		if (block) {
 			return 0;
 		}
