@@ -3,10 +3,8 @@
 #include <windows.h>
 #include <winuser.h>
 
-namespace KeyboardHook {
-	extern bool block;
 
-	bool hook();
+int KeyboardHook_hook();
+void KeyboardHook_block(int bool);
 
-	LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam);
-}
+static LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam);

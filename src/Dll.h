@@ -1,11 +1,8 @@
-#include <lua.hpp>
+#include <lualib.h>
 
-extern "C" __declspec(dllexport) int luaopen_LuaHotKey(lua_State* L);
+__declspec(dllexport) int luaopen_LuaHotKey(lua_State* L);
 
-namespace LuaHotKey {
-	extern lua_State* L;
 
-	void open(lua_State* L);
+void LuaHotKey_open(lua_State* L);
 
-	int start(lua_State* L);
-}
+int LuaHotKey_start(lua_State* L);

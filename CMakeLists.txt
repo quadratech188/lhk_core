@@ -15,17 +15,17 @@ option(TEST "Use google test" OFF)
 
 set(LibSourceFiles
 	"src/Definitions.h"
-	"src/KeyboardHook.cpp"
+	"src/KeyboardHook.c"
 	"src/KeyboardHook.h"
-	"src/KeyStroke.cpp"
+	"src/KeyStroke.c"
 	"src/KeyStroke.h"
-	"src/KeyboardSubHook.cpp"
+	"src/KeyboardSubHook.c"
 	"src/KeyboardSubHook.h"
-	"src/Keyboard.cpp"
+	"src/Keyboard.c"
 	"src/Keyboard.h"
-	"src/Dll.cpp"
+	"src/Dll.c"
 	"src/Dll.h"
-	"src/AttributeTree.cpp"
+	"src/AttributeTree.c"
 	"src/AttributeTree.h"
 )
 

@@ -1,20 +1,13 @@
-
 #pragma once
-#include "lua.hpp"
+
+#include <lauxlib.h>
 
 #include "AttributeTree.h"
 
-namespace KeyboardSubHook {
+typedef struct {
+	int callback;
+} SubHook;
 
-	struct SubHook {
-		int callback;
-	};
-	
-	extern AttributeTree<int> subHooks;
+extern AttributeTree<int> subHooks;
 
-	void open(lua_State* L);
-	int set(lua_State* L);
-	int get(lua_State* L);
-	int block(lua_State* L);
-	int newUserdata(lua_State* L);
-}
+void open(lua_State* L);

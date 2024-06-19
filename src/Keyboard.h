@@ -1,6 +1,4 @@
-#include <lua.hpp>
+#include <lauxlib.h>
 
-namespace Keyboard {
-	void open(lua_State* L);
-	int getKeyState(lua_State* L);
-}
+void Keyboard_open(lua_State* L);
+int Keyboard_getKeyState(lua_State* L);
