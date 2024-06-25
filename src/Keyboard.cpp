@@ -1,11 +1,9 @@
 #include <lua.hpp>
 
 #include <windows.h>
-#include <winuser.h>
 
 #include "Keyboard.h"
 #include "KeyboardHook.h"
-#include "KeyStroke.h"
 
 namespace Keyboard {
 	BYTE keyboardState[256];

@@ -1,5 +1,5 @@
-
 #pragma once
+
 #include "lua.hpp"
 
 #include "AttributeTree.h"

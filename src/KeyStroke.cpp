@@ -1,7 +1,5 @@
 #include <string>
-
 #include <windows.h>
-
 #include <lua.hpp>
 
 #include "KeyStroke.h"

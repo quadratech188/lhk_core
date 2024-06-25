@@ -1,13 +1,8 @@
 #include <windows.h>
-#include <winuser.h>
-
-#include "lua.h"
 
 #include "KeyboardSubHook.h"
 #include "KeyStroke.h"
-#include "Keyboard.h"
 #include "KeyboardHook.h"
-#include "Dll.h"
 #include "Modifiers.h"
 
 using namespace KeyStroke;

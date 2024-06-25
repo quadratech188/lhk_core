@@ -4,9 +4,7 @@
 
 #include "KeyboardSubHook.h"
 #include "Dll.h"
-#include "KeyStroke.h"
 #include "KeyboardHook.h"
-#include "AttributeTree.h"
 #include "Modifiers.h"
 
 namespace KeyboardSubHook {
