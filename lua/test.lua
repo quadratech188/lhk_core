@@ -15,6 +15,7 @@ condition = {
 		LCONTROL = true,
 		LMENU = true
 	},
+	autorepeated = false,
 	vkCode = 0x4B,
 	stroke = false
 }

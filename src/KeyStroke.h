@@ -12,9 +12,13 @@ namespace KeyStroke {
 		DWORD vkCode;
 		DWORD scanCode;
 		STROKE stroke;
-		int modifiers;
 		KeyStrokeUdata(WPARAM, LPARAM);
 		KeyStrokeUdata();
+		bool operator==(const KeyStrokeUdata& other) const {
+			return (this->vkCode == other.vkCode
+			     && this->scanCode == other.scanCode
+				 && this->stroke == other.stroke);
+		}	
 	};
 
 	void open(lua_State* L);

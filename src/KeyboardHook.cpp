@@ -15,6 +15,7 @@ using namespace KeyStroke;
 namespace KeyboardHook {
 	bool block;
 	KeyStrokeUdata keyStroke;
+	KeyStrokeUdata prevKeyStroke;
 
 	bool hook() {
 		SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, GetModuleHandle(NULL), 0);
@@ -27,15 +28,20 @@ namespace KeyboardHook {
 		}
 
 		block = false;
-		
+
 		keyStroke = KeyStrokeUdata(wParam, lParam);
+
+		bool repeat = prevKeyStroke == keyStroke;
 
 		int indexArray[] = {(int)keyStroke.vkCode,
 			                (int)keyStroke.scanCode,
 			                Modifiers::createFromKeyboardState(),
+							repeat + 1,
 							keyStroke.stroke + 1};
 
 		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
+
+		prevKeyStroke = keyStroke;
 
 		if (block) {
 			return 0;
