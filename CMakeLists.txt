@@ -28,6 +28,8 @@ set(LibSourceFiles
 	"src/Dll.cpp"
 	"src/Dll.h"
 	"src/AttributeTree.h"
+	"src/Modifiers.cpp"
+	"src/Modifiers.h"
 )
 
 set(LuaDirectory "${PROJECT_SOURCE_DIR}/lua-5.1.5_Win64_dll17_lib")

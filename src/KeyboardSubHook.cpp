@@ -7,6 +7,7 @@
 #include "KeyStroke.h"
 #include "KeyboardHook.h"
 #include "AttributeTree.h"
+#include "Modifiers.h"
 
 namespace KeyboardSubHook {
 	AttributeTree<SubHook> subHooks;
@@ -32,8 +33,13 @@ namespace KeyboardSubHook {
 		lua_pop(L, 1);
 		lua_getfield(L, -1, "stroke");
 		int stroke = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is up, 1 is down
+		lua_pop(L, 1);
 
-		int indexArray[] = {vkCode, scanCode, stroke};
+		lua_getfield(L, -1, "modifiers");
+
+		int modifiers = Modifiers::createFromLua(L);
+
+		int indexArray[] = {vkCode, scanCode, modifiers, stroke};
 
 		// indexArray is a reference type, but it doesn't matter becuase AttributeTree.insert doesn't save a reference to the array.
 		subHooks.insert(indexArray, subHook);

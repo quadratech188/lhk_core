@@ -8,10 +8,17 @@ print(Mylib)
 
 print(lhk)
 
-k = lhk.KeyboardSubHook.new()
+local k = function(t) print("hotkey") end
 
-k.callback = function (keyStroke)
-	print(keyStroke.vkCode)
-end
+condition = {
+	modifiers = {
+		LCONTROL = true,
+		LMENU = true
+	},
+	vkCode = 0x4B,
+	stroke = false
+}
+
+lhk.KeyboardSubHook.register(condition, k)
 
 lhk.start()

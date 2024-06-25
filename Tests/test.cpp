@@ -9,6 +9,8 @@
 #include "KeyStroke.h"
 #include "KeyboardHook.h"
 #include "KeyboardSubHook.h"
+#include "Keyboard.h"
+#include "Modifiers.h"
 
 namespace Utils {
 	const char* lastMessage;
@@ -32,6 +34,14 @@ namespace Utils {
 		KBDLLHOOKSTRUCT hookInfo = {vkCode, scanCode, 0, 0, NULL};
 		DWORD key = stroke != 0? WM_KEYUP: WM_KEYDOWN;
 		KeyboardHook::hookProc(1, key, (LPARAM)&hookInfo);
+	}
+}
+
+namespace Modifiers {
+	TEST(ModifiersTest, ModifiersTest) {
+		Keyboard::keyboardState[VK_LWIN] = 1;
+		Keyboard::keyboardState[VK_LSHIFT] = 1;
+		ASSERT_EQ(Modifiers::createFromKeyboardState(), 19);
 	}
 }
 
@@ -80,21 +90,21 @@ namespace HookCallbackTest {
 			luaL_openlibs(L);
 			
 			lua_register(L, "debugPrint", Utils::debugPrint);
-			Utils::runText(LuaHotKey::L, R"ESCAPESEQUENCE(
+		}
+	};
+
+	TEST_F(KeyboardSubHookTest, SanityCheck) {
+		Utils::runText(LuaHotKey::L, R"ESCAPESEQUENCE(
 callback = function(keyStroke) debugPrint(tostring(keyStroke.vkCode)) return end
 
 data = {
 	vkCode = nil,
 	scanCode = 456,
-	stroke = true
+	stroke = true,
 }
 
 lhk.KeyboardSubHook.register(data, callback)
 		)ESCAPESEQUENCE");
-		}
-	};
-
-	TEST_F(KeyboardSubHookTest, SanityCheck) {
 		Utils::hookProc(123, 456, 1);
 		EXPECT_EQ(Utils::lastMessage, std::string("123"));
 		Utils::lastMessage = "Blank";

@@ -12,6 +12,7 @@ namespace KeyStroke {
 		DWORD vkCode;
 		DWORD scanCode;
 		STROKE stroke;
+		int modifiers;
 		KeyStrokeUdata(WPARAM, LPARAM);
 		KeyStrokeUdata();
 	};

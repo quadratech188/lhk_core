@@ -67,11 +67,6 @@ namespace KeyStroke {
 		return 1;
 	}
 
-	int toString(lua_State* L) {
-		KeyStrokeUdata* keyStroke = LUA_CHECKUSERDATA(KeyStrokeUdata, L, 1, metatableName);
-		
-	}
-
 	int newUserdata(lua_State* L) {
 		KeyStrokeUdata keyStroke;
 

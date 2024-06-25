@@ -5,8 +5,10 @@
 
 #include "KeyboardSubHook.h"
 #include "KeyStroke.h"
+#include "Keyboard.h"
 #include "KeyboardHook.h"
 #include "Dll.h"
+#include "Modifiers.h"
 
 using namespace KeyStroke;
 
@@ -28,8 +30,10 @@ namespace KeyboardHook {
 		
 		keyStroke = KeyStrokeUdata(wParam, lParam);
 
-
-		int indexArray[] = {(int)keyStroke.vkCode, (int)keyStroke.scanCode, keyStroke.stroke + 1};
+		int indexArray[] = {(int)keyStroke.vkCode,
+			                (int)keyStroke.scanCode,
+			                Modifiers::createFromKeyboardState(),
+							keyStroke.stroke + 1};
 
 		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
 
