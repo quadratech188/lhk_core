@@ -14,14 +14,14 @@ namespace Modifiers {
 	Bit 6 | RCtrl
 	Bit 7 | RShift
 	*/
-	int createFromLua(lua_State* L) {
-		if (lua_isnil(L, -1)) {
+	int createFromLua(lua_State* L, int index) {
+		if (lua_isnil(L, index)) {
 			return 0;
 		}
 
 		int modifiers = 1;
 		
-		#define ApplyModifier(offset, name) lua_getfield(L, -1, name); modifiers += (1 << offset) * lua_toboolean(L, -1); lua_pop(L, 1);
+		#define ApplyModifier(offset, name) lua_getfield(L, index, name); modifiers += (1 << offset) * lua_toboolean(L, index); lua_pop(L, 1);
 	
 		luaL_argcheck(L, lua_istable(L, 1), 1, NULL);
 

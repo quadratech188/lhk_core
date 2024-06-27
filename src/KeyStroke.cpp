@@ -26,6 +26,10 @@ namespace KeyStroke {
 		luaL_openlib(L, userdataName, luaFunctions, 0);
 	}
 
+	KeyStrokeUdata get(lua_State* L, int index) {
+		return *LUA_CHECKUSERDATA(KeyStrokeUdata, L, index, metatableName);
+	}
+
 	int set(lua_State* L) {
 		KeyStrokeUdata* keyStroke = LUA_CHECKUSERDATA(KeyStrokeUdata, L, 1, metatableName);
 		std::string index = std::string(luaL_checkstring(L, 2));

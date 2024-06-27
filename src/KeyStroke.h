@@ -4,8 +4,8 @@
 #include <windows.h>
 
 typedef bool STROKE;
-#define STROKEDOWN FALSE;
-#define STROKEUP TRUE;
+#define STROKEDOWN FALSE
+#define STROKEUP TRUE
 
 namespace KeyStroke {
 	struct KeyStrokeUdata {
@@ -22,6 +22,7 @@ namespace KeyStroke {
 	};
 
 	void open(lua_State* L);
+	KeyStrokeUdata get(lua_State* L, int index);
 	int set(lua_State* L);
 	int get(lua_State* L);
 	int newUserdata(lua_State* L);

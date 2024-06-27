@@ -1,13 +1,15 @@
 #pragma once
 
 #include "lua.hpp"
+#include <variant>
 
 #include "AttributeTree.h"
+#include "KeyStroke.h"
 
 namespace KeyboardSubHook {
 
 	struct SubHook {
-		int callback;
+		std::variant<int, std::span<KeyStroke::KeyStrokeUdata>> data;
 	};
 	
 	extern AttributeTree<SubHook> subHooks;

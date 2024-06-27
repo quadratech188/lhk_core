@@ -2,6 +2,8 @@
 
 #include <windows.h>
 #include <lua.hpp>
+#include <span>
+#include "KeyStroke.h"
 
 namespace Keyboard {
 	extern BYTE keyboardState[256];
@@ -9,4 +11,5 @@ namespace Keyboard {
 	int getKeyState(lua_State* L);
 	bool isOn(DWORD vkCode);
 	void updateKeyboardState();
+	void sendKeyStrokes(std::span<KeyStroke::KeyStrokeUdata> keyStrokes);
 }
