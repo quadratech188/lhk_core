@@ -4,11 +4,13 @@
 #include "KeyStroke.h"
 #include "KeyboardHook.h"
 #include "Modifiers.h"
+#include <iostream>
 
 using namespace KeyStroke;
 
 namespace KeyboardHook {
 	bool block;
+	bool shouldProcess = true;
 	KeyStrokeUdata keyStroke;
 	KeyStrokeUdata prevKeyStroke;
 
@@ -18,13 +20,15 @@ namespace KeyboardHook {
 	}
 
 	LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam) {
-		if (nCode < 0) {
+		if (nCode < 0 || shouldProcess == false) {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);
 		}
 
 		block = false;
 
 		keyStroke = KeyStrokeUdata(wParam, lParam);
+
+		std::cout << keyStroke.vkCode << std::endl;
 
 		bool repeat = prevKeyStroke == keyStroke;
 
@@ -39,7 +43,7 @@ namespace KeyboardHook {
 		prevKeyStroke = keyStroke;
 
 		if (block) {
-			return 0;
+			return -1;
 		}
 		else {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);

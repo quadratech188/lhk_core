@@ -7,7 +7,7 @@
 namespace KeyboardHook {
 	extern KeyStroke::KeyStrokeUdata keyStroke;
 	extern bool block;
-	extern int falseKeyStrokes;
+	extern bool shouldProcess;
 
 
 	bool hook();

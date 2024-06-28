@@ -7,9 +7,13 @@
 #include "KeyStroke.h"
 
 namespace KeyboardSubHook {
+	struct KeyStrokes {
+		std::span<KeyStroke::KeyStrokeUdata> keyStrokes;
+	};
 
 	struct SubHook {
-		std::variant<int, std::span<KeyStroke::KeyStrokeUdata>> data;
+		std::variant<int, KeyStrokes> data;
+		bool block;
 	};
 	
 	extern AttributeTree<SubHook> subHooks;

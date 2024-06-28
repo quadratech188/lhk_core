@@ -45,9 +45,19 @@ namespace KeyboardSubHook {
 		lua_pop(L, 1); // Pop 'modifiers' table
 
 		SubHook subHook;
-		if (lua_isfunction(L, 2))
+
+		if (lua_isnil(L, 2)) {
+			subHook.data = 0;
+		}
+
+		else if (lua_isfunction(L, 2))
 			subHook.data = luaL_ref(L, LUA_REGISTRYINDEX);
 		else if (lua_istable(L, 2)) {
+
+			KeyStrokes keyStrokes;
+
+			// Read keyStrokes table
+
 			int length = lua_objlen(L, 2);
 			KeyStroke::KeyStrokeUdata* strokes = new KeyStroke::KeyStrokeUdata[length];
 
@@ -56,7 +66,17 @@ namespace KeyboardSubHook {
 				strokes[i] = KeyStroke::get(L, -1);
 				lua_pop(L, 1);
 			}
-			subHook.data = std::span<KeyStroke::KeyStrokeUdata>(strokes, length);
+			keyStrokes.keyStrokes = std::span<KeyStroke::KeyStrokeUdata>(strokes, length);
+		}
+
+		else {
+			luaL_argcheck(L, 0, 2, "Expected KeyStroke array or lua function");
+		}
+
+		if (!lua_isnil(L, 3)) {
+			luaL_argcheck(L, lua_istable(L, 3), 3, "Expected attribute table or nil");
+			lua_getfield(L, 3, "block");
+			subHook.block = lua_isboolean(L, -1)? lua_toboolean(L, -1): 1; // Default to true
 		}
 
 		// indexArray is a reference type, but it doesn't matter becuase AttributeTree.insert doesn't save a reference to the array.
@@ -68,6 +88,11 @@ namespace KeyboardSubHook {
 	void run(SubHook& subHook) {
 
 		if (std::holds_alternative<int>(subHook.data)) {
+			if (std::get<int>(subHook.data) == 0) { // NULL HotKey
+				KeyboardHook::block = subHook.block;
+				return;
+			}
+
 			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, std::get<int>(subHook.data));
 			KeyStroke::newUserdata(LuaHotKey::L, KeyboardHook::keyStroke);
 
@@ -77,8 +102,11 @@ namespace KeyboardSubHook {
 				std::cout << lua_tostring(LuaHotKey::L, -1) << std::endl;
 			}
 		}
-		else if (std::holds_alternative<std::span<KeyStroke::KeyStrokeUdata>>(subHook.data)) {
-			Keyboard::sendKeyStrokes(std::get<std::span<KeyStroke::KeyStrokeUdata>>(subHook.data));
+		else if (std::holds_alternative<KeyStrokes>(subHook.data)) {
+			KeyStrokes keyStrokes = std::get<KeyStrokes>(subHook.data);
+			Keyboard::sendKeyStrokes(keyStrokes.keyStrokes);
 		}
+		KeyboardHook::block = subHook.block;
+
 	}
 }

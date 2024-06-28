@@ -54,9 +54,13 @@ namespace Keyboard {
 				inputs[i].ki.dwFlags += KEYEVENTF_KEYUP;
 			}
 		}
-
+		
+		// Our hook is called again when we call SendInput. We don't want to process this, so we set shouldProcess to false when we call SendInput, and revert it after it is called.
+		KeyboardHook::shouldProcess = false;
 		int err = SendInput(keyStrokes.size(), inputs, sizeof(INPUT));
-		if (err == 0) {
+		KeyboardHook::shouldProcess = true;
+
+		if (err != keyStrokes.size()) {
 			throw std::runtime_error("SendInput failed: " + std::to_string(GetLastError()));
 		}
 	}
