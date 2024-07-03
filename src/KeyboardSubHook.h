@@ -5,15 +5,14 @@
 
 #include "AttributeTree.h"
 #include "KeyStroke.h"
+#include "Modifiers.h"
+
+typedef std::span<KeyStroke::KeyStrokeUdata> KeyStrokes;
 
 namespace KeyboardSubHook {
-	struct KeyStrokes {
-		std::span<KeyStroke::KeyStrokeUdata> keyStrokes;
-	};
-
 	struct SubHook {
 		std::variant<int, KeyStrokes> data;
-		bool block;
+		Flags flags;
 	};
 	
 	extern AttributeTree<SubHook> subHooks;

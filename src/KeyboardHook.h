@@ -7,6 +7,7 @@
 namespace KeyboardHook {
 	extern KeyStroke::KeyStrokeUdata keyStroke;
 	extern bool block;
+	extern bool autoRepeat;
 	extern bool shouldProcess;
 
 

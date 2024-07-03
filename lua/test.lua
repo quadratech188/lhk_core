@@ -22,13 +22,11 @@ print(k)
 local condition = {
 	modifiers = {
 	},
-	autorepeated = nil,
+	autorepeated = true,
 	vkCode = 0x54,
 	stroke = false
 }
 
-lhk.KeyboardSubHook.register(condition, nil, {block = true, autorepeat = false})
-
-lhk.KeyboardSubHook.register(condition, data, {block = true, autorepeat = false})
+lhk.KeyboardSubHook.register(condition, data, {block = false, blockAutoRepeat = true})
 
 lhk.start()

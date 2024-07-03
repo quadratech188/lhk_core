@@ -10,6 +10,7 @@ using namespace KeyStroke;
 
 namespace KeyboardHook {
 	bool block;
+	bool autoRepeat;
 	bool shouldProcess = true;
 	KeyStrokeUdata keyStroke;
 	KeyStrokeUdata prevKeyStroke;
@@ -28,14 +29,12 @@ namespace KeyboardHook {
 
 		keyStroke = KeyStrokeUdata(wParam, lParam);
 
-		std::cout << keyStroke.vkCode << std::endl;
-
-		bool repeat = prevKeyStroke == keyStroke;
+		autoRepeat = prevKeyStroke == keyStroke;
 
 		int indexArray[] = {(int)keyStroke.vkCode,
 			                (int)keyStroke.scanCode,
 			                Modifiers::createFromKeyboardState(),
-							repeat + 1,
+							autoRepeat + 1,
 							keyStroke.stroke + 1};
 
 		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
