@@ -2,17 +2,6 @@
 #include <lua.hpp>
 #include "Keyboard.h"
 #include "Modifiers.h"
-#include <iostream>
-
-static bool boolFromLua(lua_State* L, const char* index, int tableIndex, bool defaultBool) {
-	lua_getfield(L, tableIndex, index);
-	if (!lua_isboolean(L, -1))
-		return defaultBool;
-
-	bool result = lua_toboolean(L, -1);
-	lua_pop(L, 1);
-	return result;
-}
 
 namespace Modifiers {
 	/*
@@ -56,21 +45,4 @@ namespace Modifiers {
 		modifiers += (1 << 7) * Keyboard::isOn(VK_RSHIFT);
 		return modifiers;
 	}
-}
-
-Flags::Flags() {
-	block = true;
-	blockAutoRepeat = true;
-}
-
-Flags::Flags(lua_State* L, int index) {
-	if (lua_isnil(L, index)) {
-		block = true;
-		blockAutoRepeat = true;
-	}
-
-	luaL_argcheck(L, lua_istable(L, 1), 1, NULL);
-
-	this->block = boolFromLua(L, "block", -1, true);
-	this->blockAutoRepeat = boolFromLua(L, "blockAutoRepeat", -1, this->block);
 }

@@ -40,7 +40,7 @@ namespace KeyboardSubHook {
 
 		lua_getfield(L, 1, "modifiers");
 
-		int indexArray[] = {vkCode, scanCode, Modifiers::createFromLua(L, -1), repeat, stroke};
+		int indexArray[] = {vkCode, scanCode, Modifiers(L, -1), repeat, stroke};
 
 		lua_pop(L, 1); // Pop 'modifiers' table
 
