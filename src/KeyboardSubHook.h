@@ -7,8 +7,6 @@
 #include "KeyStroke.h"
 #include "Flags.h"
 
-typedef std::span<KeyStroke::KeyStrokeUdata> KeyStrokes;
-
 namespace KeyboardSubHook {
 	struct SubHook {
 		std::variant<int, KeyStrokes> data;

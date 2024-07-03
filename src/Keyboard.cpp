@@ -37,7 +37,7 @@ namespace Keyboard {
 		return keyState & 0x80;
 	}
 
-	void sendKeyStrokes(std::span<KeyStroke::KeyStrokeUdata> keyStrokes) {
+	void sendKeyStrokes(KeyStrokes keyStrokes) {
 		INPUT* inputs = (INPUT*)calloc(keyStrokes.size(), sizeof(INPUT));
 
 		for (int i = 0; i < keyStrokes.size(); i++) {

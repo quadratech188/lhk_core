@@ -5,7 +5,7 @@
 #include "KeyStroke.h"
 
 namespace KeyboardHook {
-	extern KeyStroke::KeyStrokeUdata keyStroke;
+	extern KeyStroke keyStroke;
 	extern bool block;
 	extern bool autoRepeat;
 	extern bool shouldProcess;

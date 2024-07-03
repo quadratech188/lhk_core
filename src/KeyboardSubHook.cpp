@@ -8,6 +8,7 @@
 #include "Modifiers.h"
 #include "Keyboard.h"
 #include "Flags.h"
+#include "KeyStrokeLua.h"
 
 namespace KeyboardSubHook {
 	AttributeTree<SubHook> subHooks;
@@ -55,11 +56,11 @@ namespace KeyboardSubHook {
 			// Read keyStrokes table
 
 			int length = lua_objlen(L, 2);
-			KeyStroke::KeyStrokeUdata* strokes = new KeyStroke::KeyStrokeUdata[length];
+			KeyStroke* strokes = new KeyStroke[length];
 
 			for (int i = 0; i < length; i++) {
 				lua_rawgeti(L, 2, i + 1); // lua indicies start at 1
-				strokes[i] = KeyStroke::get(L, -1);
+				strokes[i] = KeyStrokeLua::get(L, -1);
 				lua_pop(L, 1);
 			}
 			subHook.data = KeyStrokes(strokes, length);
@@ -81,7 +82,7 @@ namespace KeyboardSubHook {
 
 		if (std::holds_alternative<int>(subHook.data)) {
 			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, std::get<int>(subHook.data));
-			KeyStroke::newUserdata(LuaHotKey::L, KeyboardHook::keyStroke);
+			KeyStrokeLua::newUserdata(LuaHotKey::L, KeyboardHook::keyStroke);
 
 			int err = lua_pcall(LuaHotKey::L, 1, 0, 0);
 

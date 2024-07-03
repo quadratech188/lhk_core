@@ -1,31 +1,23 @@
 #pragma once
 
-#include <lua.hpp>
 #include <windows.h>
+#include <span>
 
 typedef bool STROKE;
-#define STROKEDOWN FALSE
-#define STROKEUP TRUE
+#define STROKEDOWN false
+#define STROKEUP true
 
-namespace KeyStroke {
-	struct KeyStrokeUdata {
-		DWORD vkCode;
-		DWORD scanCode;
-		STROKE stroke;
-		KeyStrokeUdata(WPARAM, LPARAM);
-		KeyStrokeUdata();
-		bool operator==(const KeyStrokeUdata& other) const {
-			return (this->vkCode == other.vkCode
-			     && this->scanCode == other.scanCode
-				 && this->stroke == other.stroke);
-		}	
-	};
+struct KeyStroke {
+	DWORD vkCode;
+	DWORD scanCode;
+	STROKE stroke;
+	KeyStroke(WPARAM, LPARAM);
+	KeyStroke();
+	bool operator==(const KeyStroke& other) const {
+		return (this->vkCode == other.vkCode
+			 && this->scanCode == other.scanCode
+			 && this->stroke == other.stroke);
+	}	
+};
 
-	void open(lua_State* L);
-	KeyStrokeUdata get(lua_State* L, int index);
-	int set(lua_State* L);
-	int get(lua_State* L);
-	int newUserdata(lua_State* L);
-	int newUserdata(lua_State* L, WPARAM wParam, LPARAM lParam);
-	int newUserdata(lua_State* L, KeyStrokeUdata keyStroke);
-}
+typedef std::span<KeyStroke> KeyStrokes;

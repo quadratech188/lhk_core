@@ -4,12 +4,12 @@
 #include "Dll.h"
 #include "KeyboardHook.h"
 #include "KeyboardSubHook.h"
-#include "KeyStroke.h"
+#include "KeyStrokeLua.h"
 #include "Keyboard.h"
 
 extern "C" __declspec(dllexport) int luaopen_LuaHotKey(lua_State* L) {
 	KeyboardSubHook::open(L);
-	KeyStroke::open(L);
+	KeyStrokeLua::open(L);
 	LuaHotKey::open(L);
 	Keyboard::open(L);
 	return 1;

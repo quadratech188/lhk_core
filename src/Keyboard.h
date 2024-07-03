@@ -11,5 +11,5 @@ namespace Keyboard {
 	int getKeyState(lua_State* L);
 	bool isOn(DWORD vkCode);
 	void updateKeyboardState();
-	void sendKeyStrokes(std::span<KeyStroke::KeyStrokeUdata> keyStrokes);
+	void sendKeyStrokes(KeyStrokes keyStrokes);
 }

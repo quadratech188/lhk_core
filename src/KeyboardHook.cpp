@@ -6,14 +6,12 @@
 #include "Modifiers.h"
 #include <iostream>
 
-using namespace KeyStroke;
-
 namespace KeyboardHook {
 	bool block;
 	bool autoRepeat;
 	bool shouldProcess = true;
-	KeyStrokeUdata keyStroke;
-	KeyStrokeUdata prevKeyStroke;
+	KeyStroke keyStroke;
+	KeyStroke prevKeyStroke;
 
 	bool hook() {
 		SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, GetModuleHandle(NULL), 0);
@@ -27,7 +25,7 @@ namespace KeyboardHook {
 
 		block = false;
 
-		keyStroke = KeyStrokeUdata(wParam, lParam);
+		keyStroke = KeyStroke(wParam, lParam);
 
 		autoRepeat = prevKeyStroke == keyStroke;
 
