@@ -5,7 +5,7 @@
 
 #include "AttributeTree.h"
 #include "KeyStroke.h"
-#include "Modifiers.h"
+#include "Flags.h"
 
 typedef std::span<KeyStroke::KeyStrokeUdata> KeyStrokes;
 

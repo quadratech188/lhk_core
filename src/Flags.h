@@ -7,4 +7,4 @@ struct Flags {
 	bool blockAutoRepeat: 1;
 	Flags(lua_State* L, int index);
 	Flags();
-}
+};
