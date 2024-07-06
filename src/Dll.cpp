@@ -8,9 +8,10 @@
 #include "Keyboard.h"
 
 extern "C" __declspec(dllexport) int luaopen_LuaHotKey(lua_State* L) {
+	LuaHotKey::open(L); // Creates the module
+
 	KeyboardSubHook::open(L);
 	KeyStrokeLua::open(L);
-	LuaHotKey::open(L);
 	Keyboard::open(L);
 	return 1;
 }

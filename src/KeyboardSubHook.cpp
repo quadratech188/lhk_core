@@ -19,7 +19,9 @@ namespace KeyboardSubHook {
 	};
 	
 	void open(lua_State* L) {
-		luaL_openlib(L, "lhk.KeyboardSubHook", luaFunctions, 0);
+		lua_newtable(L);
+		luaL_openlib(L, NULL, luaFunctions, 0);
+		lua_setfield(L, -2, "keyboardSubHook");
 	}
 	
 	int reg(lua_State* L) {

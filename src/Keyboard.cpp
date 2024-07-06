@@ -18,7 +18,10 @@ namespace Keyboard {
 	};
 	
 	void open(lua_State* L) {
-		luaL_openlib(L, "lhk.Keyboard", luaFunctions, 0);
+		lua_newtable(L);
+		luaL_openlib(L, NULL, luaFunctions, 0);
+
+		lua_setfield(L, -2, "keyboard");
 	}
 
 	int getKeyState(lua_State* L) {
