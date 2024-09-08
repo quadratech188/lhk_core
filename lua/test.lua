@@ -1,11 +1,6 @@
 Mylib, Err = package.loadlib("bin/LuaHotKey.dll", "luaopen_LuaHotKey")
 
-print(Err)
-
-Mylib()
-
-print(Mylib)
-
+lhk = Mylib()
 
 function printTable(t, indent)
     indent = indent or ""
@@ -40,6 +35,6 @@ local condition = {
 	stroke = false
 }
 
--- lhk.keyboardSubHook.register(condition, data, {block = false, blockAutoRepeat = true})
+lhk.keyboardSubHook.register(condition, data, {block = false, blockAutoRepeat = true})
 
--- lhk.start()
+lhk.start()

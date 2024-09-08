@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <lua.hpp>
+#include "LuaHeader.h"
 #include "Keyboard.h"
 #include "Modifiers.h"
 

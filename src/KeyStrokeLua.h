@@ -1,4 +1,4 @@
-#include <lua.hpp>
+#include "LuaHeader.h"
 #include "windows.h"
 #include "KeyStroke.h"
 

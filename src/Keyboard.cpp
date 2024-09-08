@@ -1,4 +1,4 @@
-#include <lua.hpp>
+#include "LuaHeader.h"
 
 #include <windows.h>
 #include <span>
@@ -19,7 +19,7 @@ namespace Keyboard {
 	
 	void open(lua_State* L) {
 		lua_newtable(L);
-		luaL_openlib(L, NULL, luaFunctions, 0);
+		luaL_setfuncs(L, luaFunctions, 0);
 
 		lua_setfield(L, -2, "keyboard");
 	}

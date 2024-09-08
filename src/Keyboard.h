@@ -1,7 +1,7 @@
 #pragma once
 
 #include <windows.h>
-#include <lua.hpp>
+#include "LuaHeader.h"
 #include <span>
 #include "KeyStroke.h"
 

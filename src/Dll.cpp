@@ -1,4 +1,4 @@
-#include <lua.hpp>
+#include "LuaHeader.h"
 #include <windows.h>
 
 #include "Dll.h"
@@ -26,7 +26,8 @@ namespace LuaHotKey {
 
 	void open(lua_State* L) {
 		LuaHotKey::L = L;
-		luaL_openlib(L, "lhk", luaFunctions, 0);
+		lua_newtable(L);
+		luaL_setfuncs(L, luaFunctions, 0);
 	}
 
 	int start(lua_State* L) {

@@ -1,4 +1,4 @@
-#include <lua.hpp>
+#include "LuaHeader.h"
 
 extern "C" __declspec(dllexport) int luaopen_LuaHotKey(lua_State* L);
 

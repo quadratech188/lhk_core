@@ -1,4 +1,4 @@
-#include "lua.hpp"
+#include "LuaHeader.h"
 #include <span>
 #include <iostream>
 
@@ -20,7 +20,7 @@ namespace KeyboardSubHook {
 	
 	void open(lua_State* L) {
 		lua_newtable(L);
-		luaL_openlib(L, NULL, luaFunctions, 0);
+		luaL_setfuncs(L, luaFunctions, 0);
 		lua_setfield(L, -2, "keyboardSubHook");
 	}
 	
@@ -57,7 +57,7 @@ namespace KeyboardSubHook {
 
 			// Read keyStrokes table
 
-			int length = lua_objlen(L, 2);
+			int length = lua_rawlen(L, 2);
 			KeyStroke* strokes = new KeyStroke[length];
 
 			for (int i = 0; i < length; i++) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lua.hpp>
+#include "LuaHeader.h"
 
 struct Flags {
 	bool block: 1;

@@ -23,11 +23,11 @@ namespace KeyStrokeLua {
 
 	void open(lua_State* L) {
 		lua_newtable(L);
-		luaL_openlib(L, NULL, luaFunctions, 0);
+		luaL_setfuncs(L, luaFunctions, 0);
 		lua_setfield(L, -2, "keyStroke");
 
 		luaL_newmetatable(L, metatableName);
-		luaL_openlib(L, NULL, luaMembers, 0);
+		luaL_setfuncs(L, luaMembers, 0);
 		lua_pop(L, 1); // Pop metatable reference
 	}
 
