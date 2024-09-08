@@ -7,7 +7,7 @@
 #include "KeyStrokeLua.h"
 #include "Keyboard.h"
 
-extern "C" __declspec(dllexport) int luaopen_LuaHotKey(lua_State* L) {
+extern "C" __declspec(dllexport) int luaopen_lhk_core(lua_State* L) {
 	LuaHotKey::open(L); // Creates the module
 
 	KeyboardSubHook::open(L);

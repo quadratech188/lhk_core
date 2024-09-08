@@ -30,7 +30,7 @@ build = {
 
 	install = {
 		lib = {
-			['lhk'] = 'lib/LuaHotKey.dll'
+			['lhk'] = 'lib/lhk_core.dll'
 		}
 	}
 }

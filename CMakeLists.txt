@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-project(LuaHotKey)
+project(lhk_core)
 
 option(TEST "Use google test" OFF)
 
@@ -49,20 +49,20 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
 if (TEST)
     # Build LuaHotKey as a library
-    add_library(LuaHotKey ${LibSourceFiles})
-    set_target_properties(LuaHotKey PROPERTIES WIN32_EXECUTABLE ON)
+    add_library(lhk_core ${LibSourceFiles})
+    set_target_properties(lhk_core PROPERTIES WIN32_EXECUTABLE ON)
 
-    target_include_directories(LuaHotKey PUBLIC ${LUA_INCDIR})
-    target_link_libraries(LuaHotKey ${LUA_LIBRARIES})
+    target_include_directories(lhk_core PUBLIC ${LUA_INCDIR})
+    target_link_libraries(lhk_core ${LUA_LIBRARIES})
 
     add_subdirectory(Tests)
 else()
-    add_library(LuaHotKey SHARED ${LibSourceFiles})
-    set_target_properties(LuaHotKey PROPERTIES WIN32_EXECUTABLE ON)
-    set_target_properties(LuaHotKey PROPERTIES PREFIX "")
-	set_target_properties(LuaHotKey PROPERTIES COMPILE_FLAGS "-g")
+    add_library(lhk_core SHARED ${LibSourceFiles})
+    set_target_properties(lhk_core PROPERTIES WIN32_EXECUTABLE ON)
+    set_target_properties(lhk_core PROPERTIES PREFIX "")
+	set_target_properties(lhk_core PROPERTIES COMPILE_FLAGS "-g")
 
-    target_include_directories(LuaHotKey PUBLIC ${LUA_INCDIR})
-    target_link_libraries(LuaHotKey ${LUA_LIBRARIES})
-	install(TARGETS LuaHotKey DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+    target_include_directories(lhk_core PUBLIC ${LUA_INCDIR})
+    target_link_libraries(lhk_core ${LUA_LIBRARIES})
+	install(TARGETS lhk_core DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 endif()
