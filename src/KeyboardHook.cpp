@@ -1,38 +1,49 @@
 #include <windows.h>
-#include <iostream>
 
-#include "Definitions.h"
 #include "KeyboardSubHook.h"
 #include "KeyStroke.h"
-#include "LuaEnvironment.h"
-#include "lua.h"
 #include "KeyboardHook.h"
-
-using namespace KeyStroke;
+#include "Modifiers.h"
+#include <iostream>
 
 namespace KeyboardHook {
+	bool block;
+	bool autoRepeat;
+	bool shouldProcess = true;
+	KeyStroke keyStroke;
+	KeyStroke prevKeyStroke;
+
 	bool hook() {
 		SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, GetModuleHandle(NULL), 0);
 		return true;
 	}
 
 	LRESULT CALLBACK hookProc(int nCode, WPARAM wParam, LPARAM lParam) {
-		if (nCode < 0) {
+		if (nCode < 0 || shouldProcess == false) {
 			return CallNextHookEx(NULL, nCode, wParam, lParam);
 		}
-		
-		KeyStrokeUdata keyStroke = KeyStrokeUdata(wParam, lParam);
 
-		for (const auto& it: KeyboardSubHook::subHooks) {
-			lua_rawgeti(LuaEnv::L, LUA_REGISTRYINDEX, it.callback);
-			KeyStroke::newUserdata(LuaEnv::L, keyStroke);
-			int err = lua_pcall(LuaEnv::L, 1, 0, 0);
+		block = false;
 
-			if (err != 0) {
-				std::cout << lua_tostring(LuaEnv::L, -1) << std::endl;
-			}
+		keyStroke = KeyStroke(wParam, lParam);
+
+		autoRepeat = prevKeyStroke == keyStroke;
+
+		int indexArray[] = {(int)keyStroke.vkCode,
+			                (int)keyStroke.scanCode,
+			                Modifiers::createFromKeyboardState(),
+							autoRepeat + 1,
+							keyStroke.stroke + 1};
+
+		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
+
+		prevKeyStroke = keyStroke;
+
+		if (block) {
+			return -1;
 		}
-
-		return 0;
+		else {
+			return CallNextHookEx(NULL, nCode, wParam, lParam);
+		}
 	}
 }

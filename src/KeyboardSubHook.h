@@ -1,21 +1,21 @@
-
 #pragma once
+
 #include "lua.hpp"
+#include <variant>
 
-#include <list>
-
-#include "Definitions.h"
+#include "AttributeTree.h"
+#include "KeyStroke.h"
+#include "Flags.h"
 
 namespace KeyboardSubHook {
 	struct SubHook {
-		int condition;
-		int callback;
+		std::variant<int, KeyStrokes> data;
+		Flags flags;
 	};
-
-	extern std::list<SubHook> subHooks;
+	
+	extern AttributeTree<SubHook> subHooks;
 
 	void open(lua_State* L);
-	int set(lua_State* L);
-	int get(lua_State* L);
-	int newUserdata(lua_State* L);
+	int reg(lua_State* L);
+	void run(SubHook& subHook);
 }

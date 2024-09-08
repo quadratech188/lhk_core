@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Create compile_commands.json (For clangd)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_BUILD_TYPE Debug)
+
+#set(CMAKE_STATIC_LIBRARY_PREFIX "")
+#set(CMAKE_SHARED_LIBRARY_PREFIX "")
+
 project(LuaHotKey)
 
 option(TEST "Use google test" OFF)
@@ -16,11 +21,19 @@ set(LibSourceFiles
 	"src/KeyboardHook.h"
 	"src/KeyStroke.cpp"
 	"src/KeyStroke.h"
+	"src/KeyStrokeLua.cpp"
+	"src/KeyStrokeLua.h"
 	"src/KeyboardSubHook.cpp"
 	"src/KeyboardSubHook.h"
-	"src/LuaEnvironment.cpp"
-	"src/LuaEnvironment.h"
-	"src/Source.cpp"
+	"src/Keyboard.cpp"
+	"src/Keyboard.h"
+	"src/Dll.cpp"
+	"src/Dll.h"
+	"src/AttributeTree.h"
+	"src/Modifiers.cpp"
+	"src/Modifiers.h"
+	"src/Flags.cpp"
+	"src/Flags.h"
 )
 
 set(LuaDirectory "${PROJECT_SOURCE_DIR}/lua-5.1.5_Win64_dll17_lib")
@@ -38,7 +51,10 @@ if (TEST)
 
 	add_subdirectory(Tests)
 else()
-	add_executable(LuaHotKey WIN32 ${LibSourceFiles})
+	add_library(LuaHotKey SHARED ${LibSourceFiles})
+	set_target_properties(LuaHotKey PROPERTIES WIN32_EXECUTABLE ON)
+	set_target_properties(LuaHotKey PROPERTIES PREFIX "")
+
 	target_include_directories(LuaHotKey PUBLIC "${LuaDirectory}/include")
 	target_link_libraries(LuaHotKey "${LuaDirectory}/lua5.1.lib")
 endif()
