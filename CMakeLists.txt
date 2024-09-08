@@ -13,7 +13,14 @@ project(LuaHotKey)
 option(TEST "Use google test" OFF)
 
 # Find Lua
-find_package(Lua REQUIRED)
+if (NOT DEFINED LUA_LIBDIR)
+	message("LUA_LIBDIR is not set, this is not being run by luarocks")
+	find_package(Lua REQUIRED)
+	set(LUA_INCDIR ${LUA_INCLUDE_DIR})
+else()
+	file(TO_CMAKE_PATH ${LUA_LIBDIR} temp)
+	set(LUA_LIBRARIES ${temp}/${LUA_LIBDIR_FILE})
+endif()
 
 set(LibSourceFiles
     "src/Definitions.h"
@@ -37,7 +44,7 @@ set(LibSourceFiles
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/lib")
 
 
 if (TEST)
@@ -45,7 +52,7 @@ if (TEST)
     add_library(LuaHotKey ${LibSourceFiles})
     set_target_properties(LuaHotKey PROPERTIES WIN32_EXECUTABLE ON)
 
-    target_include_directories(LuaHotKey PUBLIC ${LUA_INCLUDE_DIR})
+    target_include_directories(LuaHotKey PUBLIC ${LUA_INCDIR})
     target_link_libraries(LuaHotKey ${LUA_LIBRARIES})
 
     add_subdirectory(Tests)
@@ -55,6 +62,7 @@ else()
     set_target_properties(LuaHotKey PROPERTIES PREFIX "")
 	set_target_properties(LuaHotKey PROPERTIES COMPILE_FLAGS "-g")
 
-    target_include_directories(LuaHotKey PUBLIC ${LUA_INCLUDE_DIR})
+    target_include_directories(LuaHotKey PUBLIC ${LUA_INCDIR})
     target_link_libraries(LuaHotKey ${LUA_LIBRARIES})
+	install(TARGETS LuaHotKey DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 endif()
