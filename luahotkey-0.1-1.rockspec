@@ -1,10 +1,11 @@
 package = "LuaHotKey"
 version = "1.0-1"
 source = {
-	url = ""
+	url = "git://github.com/quadratech188/LuaHotKey"
+	tag = "v0.1"
 }
 description = {
-	summary = "A hotkey program as a lua module",
+	summary = "A Windows hotkey program as a lua module",
 	detailed = [[
 	TBD
 	]],
