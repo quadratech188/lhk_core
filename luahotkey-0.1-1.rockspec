@@ -1,5 +1,5 @@
 package = "LuaHotKey"
-version = "1.0-1"
+version = "0.1-1"
 source = {
 	url = "git://github.com/quadratech188/LuaHotKey"
 	tag = "v0.1"
