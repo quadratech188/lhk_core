@@ -1,13 +1,13 @@
-package = "LuaHotKey"
+package = "lhk_core"
 version = "0.1-1"
 source = {
 	url = "git://github.com/quadratech188/LuaHotKey",
 	tag = "v0.1"
 }
 description = {
-	summary = "A Windows hotkey program as a lua module",
+	summary = "C++ core for lhk",
 	detailed = [[
-	TBD
+	C++ core for lhk
 	]],
 	homepage = "",
 	license = "MIT"
@@ -31,7 +31,9 @@ build = {
 
 	install = {
 		lib = {
-			['lhk'] = 'lib/lhk_core.dll'
+			['lhk.core'] = 'lib/lhk_core.dll'
+		},
+		lua = {
 		}
 	}
 }
