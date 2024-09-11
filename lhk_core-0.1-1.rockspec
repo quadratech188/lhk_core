@@ -31,7 +31,7 @@ build = {
 
 	install = {
 		lib = {
-			['lhk.core'] = 'lib/lhk_core.dll'
+			[''] = 'lib/lhk_core.dll'
 		},
 		lua = {
 		}
