@@ -24,7 +24,7 @@ namespace KeyStrokeLua {
 	void open(lua_State* L) {
 		lua_newtable(L);
 		luaL_setfuncs(L, luaFunctions, 0);
-		lua_setfield(L, -2, "keyStroke");
+		lua_setfield(L, -2, "KeyStroke");
 
 		luaL_newmetatable(L, metatableName);
 		luaL_setfuncs(L, luaMembers, 0);
