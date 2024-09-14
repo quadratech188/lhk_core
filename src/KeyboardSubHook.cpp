@@ -50,10 +50,11 @@ namespace KeyboardSubHook {
 
 		SubHook subHook;
 
-		if (lua_isfunction(L, 2))
-			subHook.data = luaL_ref(L, LUA_REGISTRYINDEX);
+		if (lua_isfunction(L, 2)) {
+			lua_pushvalue(L, 2); // Push function to the top of the stack
+			subHook.data = luaL_ref(L, LUA_REGISTRYINDEX); // Pop the function from the stack
+		}
 		else if (lua_istable(L, 2)) {
-
 
 			// Read keyStrokes table
 
@@ -62,17 +63,21 @@ namespace KeyboardSubHook {
 
 			for (int i = 0; i < length; i++) {
 				lua_rawgeti(L, 2, i + 1); // lua indicies start at 1
-				strokes[i] = KeyStrokeLua::get(L, -1);
-				lua_pop(L, 1);
+				strokes[i] = KeyStrokeLua::get(L, -1); // Top element
+				lua_pop(L, 1); // Pop top element
 			}
 			subHook.data = KeyStrokes(strokes, length);
 		}
-
 		else {
 			luaL_argcheck(L, 0, 2, "Expected KeyStroke array or lua function");
 		}
-		
-		subHook.flags = Flags(L, 3);
+
+		if (lua_gettop(L) >= 3) {
+			subHook.flags = Flags(L, 1);
+		}
+		else {
+			subHook.flags = Flags();
+		}
 
 		// indexArray is a reference type, but it doesn't matter becuase AttributeTree.insert doesn't save a reference to the array.
 		subHooks.insert(indexArray, subHook);
