@@ -1,4 +1,5 @@
 #include <string>
+#include <format>
 #include <windows.h>
 #include <lua.hpp>
 
@@ -18,6 +19,7 @@ namespace KeyStrokeLua {
 	const luaL_Reg luaMembers[] = {
 		{"__newindex", set},
 		{"__index", get},
+		{"__tostring", toString},
 		{NULL, NULL}
 	};
 
@@ -71,6 +73,19 @@ namespace KeyStrokeLua {
 		else {
 			luaL_argcheck(L, false, 2, "invalid index");
 		}
+		return 1;
+	}
+
+	int toString(lua_State* L) {
+		KeyStroke* keyStroke = LUA_CHECKUSERDATA(KeyStroke, L, 1, metatableName);
+
+		std::string data = std::format("vkCode: {}, scanCode: {}, stroke: {}",
+				keyStroke->vkCode != 0? std::to_string(keyStroke->vkCode): "Unspecified",
+				keyStroke->scanCode != 0? std::to_string(keyStroke->scanCode): "Unspecified",
+				keyStroke->stroke == STROKEDOWN? "Press": "Release");
+
+		lua_pushstring(L, data.c_str());
+
 		return 1;
 	}
 
