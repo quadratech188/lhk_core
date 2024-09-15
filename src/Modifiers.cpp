@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <winuser.h>
 #include "LuaHeader.h"
 #include "Keyboard.h"
 #include "Modifiers.h"
@@ -10,9 +11,10 @@ namespace Modifiers {
 	Bit 2 | LMenu
 	Bit 3 | LCtrl
 	Bit 4 | LShift
-	Bit 5 | RMenu
-	Bit 6 | RCtrl
-	Bit 7 | RShift
+	Bit 5 | RWin
+	Bit 6 | RMenu
+	Bit 7 | RCtrl
+	Bit 8 | RShift
 	*/
 	int createFromLua(lua_State* L, int index) {
 		if (lua_isnil(L, index)) {
@@ -29,9 +31,10 @@ namespace Modifiers {
 		ApplyModifier(2, "LMENU");
 		ApplyModifier(3, "LCONTROL");
 		ApplyModifier(4, "LSHIFT");
-		ApplyModifier(5, "RMENU");
-		ApplyModifier(6, "RCONTROL");
-		ApplyModifier(7, "RSHIFT");
+		ApplyModifier(5, "RWIN")
+		ApplyModifier(6, "RMENU");
+		ApplyModifier(7, "RCONTROL");
+		ApplyModifier(8, "RSHIFT");
 		return modifiers;
 	}
 	int createFromKeyboardState() {
@@ -40,9 +43,10 @@ namespace Modifiers {
 		modifiers += (1 << 2) * Keyboard::isOn(VK_LMENU);
 		modifiers += (1 << 3) * Keyboard::isOn(VK_LCONTROL);
 		modifiers += (1 << 4) * Keyboard::isOn(VK_LSHIFT);
-		modifiers += (1 << 5) * Keyboard::isOn(VK_RMENU);
-		modifiers += (1 << 6) * Keyboard::isOn(VK_RCONTROL);
-		modifiers += (1 << 7) * Keyboard::isOn(VK_RSHIFT);
+		modifiers += (1 << 5) * Keyboard::isOn(VK_RWIN);
+		modifiers += (1 << 6) * Keyboard::isOn(VK_RMENU);
+		modifiers += (1 << 7) * Keyboard::isOn(VK_RCONTROL);
+		modifiers += (1 << 8) * Keyboard::isOn(VK_RSHIFT);
 		return modifiers;
 	}
 }
