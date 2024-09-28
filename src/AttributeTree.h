@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <forward_list>
 #include <span>
+#include <functional>
 
 template <typename T> class AttributeTree {
 private:
@@ -17,7 +18,7 @@ private:
 
 	AttributeNodeType root;
 
-	void callIncludingDefault(std::span<int> indexArray, void (*func)(T&), int currentIndex, AttributeNodeType& currentNode) {
+	void callIncludingDefault(std::span<int> indexArray, std::function<void(T)> func, int currentIndex, AttributeNodeType& currentNode) {
 		if (indexArray.size() == currentIndex) {
 			for (auto& it: currentNode.value) {
 				func(it);
@@ -35,7 +36,7 @@ private:
 		}
 	}
 public:
-	void callIncludingDefault(std::span<int> indexArray, void(*func)(T&)) {
+	void callIncludingDefault(std::span<int> indexArray, std::function<void(T)> func) {
 		callIncludingDefault(indexArray, func, 0, root);
 	}
 
