@@ -36,6 +36,9 @@ namespace Modifiers {
 		ApplyModifier(6, "RMENU");
 		ApplyModifier(7, "RCONTROL");
 		ApplyModifier(8, "RSHIFT");
+		
+		#undef ApplyModifier
+
 		return modifiers;
 	}
 	int createFromKeyboardState() {
