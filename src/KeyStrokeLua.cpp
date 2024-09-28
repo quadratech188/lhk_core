@@ -1,8 +1,8 @@
 #include <string>
 #include <format>
 #include <windows.h>
-#include <lua.hpp>
 
+#include "LuaHeader.h"
 #include "KeyStroke.h"
 #include "KeyStrokeLua.h"
 #include "Definitions.h"
