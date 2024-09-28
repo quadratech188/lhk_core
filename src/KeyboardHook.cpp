@@ -4,7 +4,9 @@
 #include "KeyStroke.h"
 #include "KeyboardHook.h"
 #include "Modifiers.h"
-#include <iostream>
+#include "Layers.h"
+
+using namespace KeyboardSubHook;
 
 namespace KeyboardHook {
 	bool block;
@@ -34,8 +36,10 @@ namespace KeyboardHook {
 			                Modifiers::createFromKeyboardState(),
 							autoRepeat + 1,
 							keyStroke.stroke + 1};
-
-		KeyboardSubHook::subHooks.callIncludingDefault(indexArray, KeyboardSubHook::run);
+		
+		for (auto& layerIt: Layers::activatedLayers) {
+			layerIt.second->subHooks.callIncludingDefault(indexArray, [](SubHook subHook) {subHook.run();});
+		}
 
 		prevKeyStroke = keyStroke;
 

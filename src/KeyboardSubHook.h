@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include "LuaHeader.h"
 #include <variant>
 
@@ -11,11 +12,13 @@ namespace KeyboardSubHook {
 	struct SubHook {
 		std::variant<int, KeyStrokes> data;
 		Flags flags;
+		void run();
+		SubHook(lua_State* L, int index);
+		SubHook(std::variant<int, KeyStrokes> data, Flags flags): flags(flags), data(data) {};
 	};
 	
 	extern AttributeTree<SubHook> subHooks;
-
-	void open(lua_State* L);
-	int reg(lua_State* L);
-	void run(SubHook& subHook);
+	
+	std::array<int, 5> getFilter(lua_State* L, int index);
+	std::variant<int, KeyStrokes> getActions(lua_State* L, int index);
 }

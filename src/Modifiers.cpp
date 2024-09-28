@@ -23,9 +23,10 @@ namespace Modifiers {
 
 		int modifiers = 1;
 		
-		#define ApplyModifier(offset, name) lua_getfield(L, index, name); modifiers += (1 << offset) * lua_toboolean(L, index); lua_pop(L, 1);
-	
-		luaL_argcheck(L, lua_istable(L, 1), 1, NULL);
+		#define ApplyModifier(offset, name) lua_getfield(L, index, name); modifiers += (1 << offset) * lua_toboolean(L, -1); lua_pop(L, 1);
+		
+		//TODO: Better error handling
+		luaL_argcheck(L, lua_istable(L, index), 1, NULL);
 
 		ApplyModifier(1, "LWIN");
 		ApplyModifier(2, "LMENU");

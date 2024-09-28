@@ -21,7 +21,8 @@ Flags::Flags(lua_State* L, int index) {
 		blockAutoRepeat = true;
 	}
 
-	luaL_argcheck(L, lua_istable(L, 1), 1, NULL);
+	//TODO: Better error handling
+	luaL_argcheck(L, lua_istable(L, index), index, NULL);
 
 	this->block = boolFromLua(L, "block", index, true);
 	this->blockAutoRepeat = boolFromLua(L, "blockAutoRepeat", index, this->block);

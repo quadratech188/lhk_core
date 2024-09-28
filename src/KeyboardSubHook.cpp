@@ -1,7 +1,5 @@
 #include "LuaHeader.h"
-#include <span>
-#include <iostream>
-
+#include <array>
 #include "KeyboardSubHook.h"
 #include "Dll.h"
 #include "KeyboardHook.h"
@@ -9,86 +7,73 @@
 #include "Keyboard.h"
 #include "Flags.h"
 #include "KeyStrokeLua.h"
+#include "LayerLua.h"
 
 namespace KeyboardSubHook {
 	AttributeTree<SubHook> subHooks;
 
-	const luaL_Reg luaFunctions[] = {
-		{"register", reg},
-		{NULL, NULL}
-	};
-	
-	void open(lua_State* L) {
-		lua_newtable(L);
-		luaL_setfuncs(L, luaFunctions, 0);
-		lua_setfield(L, -2, "keyboardSubHook");
-	}
-	
-	int reg(lua_State* L) {
-
-		luaL_argcheck(L, lua_istable(L, 1), 1, NULL);
-		lua_getfield(L, 1, "vkCode");
+	std::array<int, 5> getFilter(lua_State* L, int index) {
+		luaL_argcheck(L, lua_istable(L, index), 1, NULL);
+		lua_getfield(L, index, "vkCode");
 		int vkCode = lua_isnumber(L, -1)? lua_tointeger(L, -1): 0;
 		lua_pop(L, 1);
-		lua_getfield(L, 1, "scanCode");
+		lua_getfield(L, index, "scanCode");
 		int scanCode = lua_isnumber(L, -1)? lua_tointeger(L, -1): 0;
 		lua_pop(L, 1);
-		lua_getfield(L, 1, "stroke");
+		lua_getfield(L, index, "stroke");
 		int stroke = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is up, 1 is down
 		lua_pop(L, 1);
-		lua_getfield(L, 1, "autorepeated");
+		lua_getfield(L, index, "autorepeated");
 		int repeat = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is when key is autorepeated (why would you want this), 
-																		// and 1 is when key is not autorepeated
 		lua_pop(L, 1);
 
-
-		lua_getfield(L, 1, "modifiers");
-
-		int indexArray[] = {vkCode, scanCode, Modifiers::createFromLua(L, -1), repeat, stroke};
-
+		lua_getfield(L, index, "modifiers");
+		int modifiers = Modifiers::createFromLua(L, -1);
 		lua_pop(L, 1); // Pop 'modifiers' table
 
-		SubHook subHook;
+		return {vkCode, scanCode, modifiers, repeat, stroke};
+	}
 
-		if (lua_isfunction(L, 2)) {
-			lua_pushvalue(L, 2); // Push function to the top of the stack
-			subHook.data = luaL_ref(L, LUA_REGISTRYINDEX); // Pop the function from the stack
+	std::variant<int, KeyStrokes> getActions(lua_State* L, int index) {
+		if (lua_isfunction(L, index)) {
+			lua_pushvalue(L, index); // Push function to the top of the stack
+			return luaL_ref(L, LUA_REGISTRYINDEX); // Pop the function from the stack
 		}
-		else if (lua_istable(L, 2)) {
+		else if (lua_istable(L, index)) {
 
 			// Read keyStrokes table
 
-			int length = lua_rawlen(L, 2);
+			int length = lua_rawlen(L, index);
 			KeyStroke* strokes = new KeyStroke[length];
 
 			for (int i = 0; i < length; i++) {
-				lua_rawgeti(L, 2, i + 1); // lua indicies start at 1
+				lua_rawgeti(L, index, i + 1); // lua indices start at 1
+													  //
+				// TODO: Better error message when the member is not a keystroke
 				strokes[i] = KeyStrokeLua::get(L, -1); // Top element
+				
 				lua_pop(L, 1); // Pop top element
 			}
-			subHook.data = KeyStrokes(strokes, length);
+			return KeyStrokes(strokes, length);
 		}
 		else {
-			luaL_argcheck(L, 0, 2, "Expected KeyStroke array or lua function");
+			luaL_argcheck(L, 0, index, "Expected KeyStroke array or lua function");
 		}
-
-		if (lua_gettop(L) >= 3) {
-			subHook.flags = Flags(L, 1);
-		}
-		else {
-			subHook.flags = Flags();
-		}
-
-		// indexArray is a reference type, but it doesn't matter becuase AttributeTree.insert doesn't save a reference to the array.
-		subHooks.insert(indexArray, subHook);
-
-		return 0;
 	}
 
-	void run(SubHook& subHook) {
+	SubHook::SubHook(lua_State* L, int index) {
+		this->data = getActions(L, index);
+		if (lua_gettop(L) >= index + 1) {
+			this->flags = Flags(L, index + 1);
+		}
+		else {
+			this->flags = Flags();
+		}
+	}
 
-		if (std::holds_alternative<int>(subHook.data)) {
-			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, std::get<int>(subHook.data));
+	void SubHook::run() {
+		if (std::holds_alternative<int>(this->data)) {
+			lua_rawgeti(LuaHotKey::L, LUA_REGISTRYINDEX, std::get<int>(this->data));
 			KeyStrokeLua::newUserdata(LuaHotKey::L, KeyboardHook::keyStroke);
 
 			int err = lua_pcall(LuaHotKey::L, 1, 0, 0);
@@ -97,13 +82,13 @@ namespace KeyboardSubHook {
 				std::cout << lua_tostring(LuaHotKey::L, -1) << std::endl;
 			}
 		}
-		else if (std::holds_alternative<KeyStrokes>(subHook.data)) {
-			KeyStrokes keyStrokes = std::get<KeyStrokes>(subHook.data);
+		else if (std::holds_alternative<KeyStrokes>(this->data)) {
+			KeyStrokes keyStrokes = std::get<KeyStrokes>(this->data);
 			Keyboard::sendKeyStrokes(keyStrokes);
 		}
 		if (KeyboardHook::autoRepeat)
-			KeyboardHook::block = subHook.flags.blockAutoRepeat;
+			KeyboardHook::block = this->flags.blockAutoRepeat;
 		else
-			KeyboardHook::block = subHook.flags.block;
+			KeyboardHook::block = this->flags.block;
 	}
 }

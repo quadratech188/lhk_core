@@ -41,6 +41,10 @@ set(LibSourceFiles
     "src/Modifiers.h"
     "src/Flags.cpp"
     "src/Flags.h"
+	"src/Layers.cpp"
+	"src/Layers.h"
+	"src/LayerLua.cpp"
+	"src/LayerLua.h"
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")

@@ -3,16 +3,16 @@
 
 #include "Dll.h"
 #include "KeyboardHook.h"
-#include "KeyboardSubHook.h"
 #include "KeyStrokeLua.h"
 #include "Keyboard.h"
+#include "LayerLua.h"
 
 extern "C" __declspec(dllexport) int luaopen_lhk_core(lua_State* L) {
 	LuaHotKey::open(L); // Creates the module
-
-	KeyboardSubHook::open(L);
+	
 	KeyStrokeLua::open(L);
 	Keyboard::open(L);
+	LayerLua::open(L);
 	return 1;
 }
 
