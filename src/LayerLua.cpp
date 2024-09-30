@@ -24,7 +24,8 @@ namespace LayerLua {
 	};
 	
 	const luaL_Reg luaMethods[] = {
-		// {"__index", index},
+		{"name", getName},
+		{"activated", getActivated},
 		{"activate", activate},
 		{"deactivate", deactivate},
 		{"register", reg},
@@ -53,7 +54,7 @@ namespace LayerLua {
 
 		LayerUserdata* userdataPtr = LUA_NEWUSERDATA(LayerUserdata, L);
 
-		new (userdataPtr) LayerUserdata {name};
+		new (userdataPtr) LayerUserdata {name, false};
 
 		luaL_getmetatable(L, metatableName);
 		lua_setmetatable(L, -2);
@@ -76,34 +77,34 @@ namespace LayerLua {
 		return 1;
 	}
 
-	int index(lua_State* L) {
+	int getName(lua_State* L) {
 		LayerUserdata* layer = LUA_CHECKUSERDATA(LayerUserdata, L, 1, metatableName);
-		std::string index = luaL_checkstring(L, 2);
-
-		if (index == "enabled") {
-			lua_pushboolean(L, Layers::activated(layer->name));
-		}
-		else if (index == "name") {
-			lua_pushstring(L, layer->name.c_str());
-		}
-		else {
-			lua_pushnil(L);
-		}
+		lua_pushstring(L, layer->name.c_str());
 		return 1;
 	}
+
+	int getActivated(lua_State* L) {
+		LayerUserdata* layer = LUA_CHECKUSERDATA(LayerUserdata, L, 1, metatableName);
+		lua_pushboolean(L, layer->activated);
+		return 1;
+	}
+
+
 	int activate(lua_State* L) {
 		LayerUserdata* layer = LUA_CHECKUSERDATA(LayerUserdata, L, 1, metatableName);
 
-		if (!Layers::activated(layer->name)) {
+		if (!layer->activated) {
 			Layers::activate(layer->name);
+			layer->activated = true;
 		}
 		return 0;
 	}
 	int deactivate(lua_State* L) {
 		LayerUserdata* layer = LUA_CHECKUSERDATA(LayerUserdata, L, 1, metatableName);
 
-		if (Layers::activated(layer->name)) {
+		if (layer->activated) {
 			Layers::deactivate(layer->name);
+			layer->activated = false;
 		}
 		return 0;
 	}
