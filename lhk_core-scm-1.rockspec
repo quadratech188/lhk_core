@@ -1,8 +1,8 @@
 package = "lhk_core"
-version = "0.1-1"
+version = "scm-1"
 source = {
 	url = "git://github.com/quadratech188/LuaHotKey",
-	tag = "v0.1"
+	branch = "main"
 }
 description = {
 	summary = "C++ core for lhk",
