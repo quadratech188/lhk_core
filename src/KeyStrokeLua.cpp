@@ -48,7 +48,7 @@ namespace KeyStrokeLua {
 			keyStroke->scanCode = lua_tointeger(L, 3);
 		}
 		else if (index == "stroke") {
-			keyStroke->stroke = lua_toboolean(L, 3);
+			keyStroke->stroke = Stroke(L, 3);
 		}
 		else {
 			luaL_argcheck(L, false, 2, "invalid index");
@@ -68,7 +68,7 @@ namespace KeyStrokeLua {
 			lua_pushinteger(L, keyStroke->scanCode);
 		}
 		else if (index == "stroke") {
-			lua_pushboolean(L, keyStroke->stroke);
+			lua_pushstring(L, static_cast<std::string>(keyStroke->stroke).c_str());
 		}
 		else {
 			luaL_argcheck(L, false, 2, "invalid index");
@@ -82,7 +82,7 @@ namespace KeyStrokeLua {
 		std::string data = std::format("vkCode: {}, scanCode: {}, stroke: {}",
 				keyStroke->vkCode != 0? std::to_string(keyStroke->vkCode): "Unspecified",
 				keyStroke->scanCode != 0? std::to_string(keyStroke->scanCode): "Unspecified",
-				keyStroke->stroke == STROKEDOWN? "Press": "Release");
+				static_cast<std::string>(keyStroke->stroke));
 
 		lua_pushstring(L, data.c_str());
 
@@ -98,7 +98,12 @@ namespace KeyStrokeLua {
 
 		keyStroke.scanCode = (numArgs >= 2 && !lua_isnil(L, 2))? lua_tointeger(L, 2): 0;
 
-		keyStroke.stroke = numArgs >= 3? lua_toboolean(L, 3): STROKEDOWN;
+		if (numArgs >= 3) {
+			keyStroke.stroke = Stroke(L, 3);
+		}
+		else {
+			keyStroke.stroke = Stroke();
+		}
 
 		KeyStroke* userdataPtr = LUA_NEWUSERDATA(KeyStroke, L);
 

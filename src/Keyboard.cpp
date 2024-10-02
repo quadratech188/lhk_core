@@ -4,6 +4,7 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <winuser.h>
 
 #include "Keyboard.h"
 #include "KeyboardHook.h"
@@ -52,8 +53,7 @@ namespace Keyboard {
 				inputs[i].ki.wScan = keyStrokes[i].scanCode;
 				inputs[i].ki.dwFlags += KEYEVENTF_SCANCODE;
 			}
-			
-			if (keyStrokes[i].stroke == STROKEUP) {
+			if (keyStrokes[i].stroke.isRelease()) {
 				inputs[i].ki.dwFlags += KEYEVENTF_KEYUP;
 			}
 		}

@@ -48,6 +48,8 @@ set(LibSourceFiles
 	"src/Layers.h"
 	"src/LayerLua.cpp"
 	"src/LayerLua.h"
+	"src/Stroke.cpp"
+	"src/Stroke.h"
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")

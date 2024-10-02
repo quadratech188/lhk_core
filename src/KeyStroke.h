@@ -4,15 +4,12 @@
 #include <span>
 
 #include "LuaHeader.h"
-
-typedef bool STROKE;
-#define STROKEDOWN false
-#define STROKEUP true
+#include "Stroke.h"
 
 struct KeyStroke {
 	DWORD vkCode;
 	DWORD scanCode;
-	STROKE stroke;
+	Stroke stroke;
 	KeyStroke(WPARAM, LPARAM);
 	KeyStroke();
 	bool operator==(const KeyStroke& other) const {
