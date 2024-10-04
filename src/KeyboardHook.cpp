@@ -35,7 +35,7 @@ namespace KeyboardHook {
 			                (int)keyStroke.scanCode,
 			                Modifiers::createFromKeyboardState(),
 							autoRepeat + 1,
-							keyStroke.stroke + 1};
+							(int)keyStroke.stroke};
 		
 		for (auto& layerIt: Layers::activatedLayers) {
 			layerIt.second->subHooks.callIncludingDefault(indexArray, [](SubHook subHook) {subHook.run();});

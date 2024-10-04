@@ -8,6 +8,7 @@
 #include "Flags.h"
 #include "KeyStrokeLua.h"
 #include "LayerLua.h"
+#include "Stroke.h"
 
 namespace KeyboardSubHook {
 	AttributeTree<SubHook> subHooks;
@@ -21,7 +22,7 @@ namespace KeyboardSubHook {
 		int scanCode = lua_isnumber(L, -1)? lua_tointeger(L, -1): 0;
 		lua_pop(L, 1);
 		lua_getfield(L, index, "stroke");
-		int stroke = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is up, 1 is down
+		int stroke = lua_isstring(L, -1)? Stroke(L, -1): 0;
 		lua_pop(L, 1);
 		lua_getfield(L, index, "autorepeated");
 		int repeat = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is when key is autorepeated (why would you want this), 
