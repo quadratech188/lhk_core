@@ -32,16 +32,7 @@ Stroke::operator std::string() const {
 }
 
 Stroke::operator int() const {
-	switch(this->value) {
-		case PRESS:
-			return 1;
-		case RELEASE:
-			return 2;
-		case MIRROR:
-			return 3;
-		default:
-			throw std::runtime_error("Invalid stroke value");
-	}
+	return this->value;
 }
 
 bool Stroke::isRelease() const{

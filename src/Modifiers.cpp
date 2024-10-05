@@ -22,36 +22,36 @@ namespace Modifiers {
 			return std::nullopt;
 		}
 
-		int modifiers = 1;
+		int modifiers = 0;
 		
 		#define ApplyModifier(offset, name) lua_getfield(L, index, name); modifiers += (1 << offset) * lua_toboolean(L, -1); lua_pop(L, 1);
 		
 		//TODO: Better error handling
 		luaL_argcheck(L, lua_istable(L, index), 1, NULL);
 
-		ApplyModifier(1, "LWIN");
-		ApplyModifier(2, "LMENU");
-		ApplyModifier(3, "LCONTROL");
-		ApplyModifier(4, "LSHIFT");
-		ApplyModifier(5, "RWIN")
-		ApplyModifier(6, "RMENU");
-		ApplyModifier(7, "RCONTROL");
-		ApplyModifier(8, "RSHIFT");
+		ApplyModifier(0, "LWIN");
+		ApplyModifier(1, "LMENU");
+		ApplyModifier(2, "LCONTROL");
+		ApplyModifier(3, "LSHIFT");
+		ApplyModifier(4, "RWIN")
+		ApplyModifier(5, "RMENU");
+		ApplyModifier(6, "RCONTROL");
+		ApplyModifier(7, "RSHIFT");
 		
 		#undef ApplyModifier
 
 		return modifiers;
 	}
 	int createFromKeyboardState() {
-		int modifiers = 1;
-		modifiers += (1 << 1) * Keyboard::isOn(VK_LWIN);
-		modifiers += (1 << 2) * Keyboard::isOn(VK_LMENU);
-		modifiers += (1 << 3) * Keyboard::isOn(VK_LCONTROL);
-		modifiers += (1 << 4) * Keyboard::isOn(VK_LSHIFT);
-		modifiers += (1 << 5) * Keyboard::isOn(VK_RWIN);
-		modifiers += (1 << 6) * Keyboard::isOn(VK_RMENU);
-		modifiers += (1 << 7) * Keyboard::isOn(VK_RCONTROL);
-		modifiers += (1 << 8) * Keyboard::isOn(VK_RSHIFT);
+		int modifiers = 0;
+		modifiers += (1 << 0) * Keyboard::isOn(VK_LWIN);
+		modifiers += (1 << 1) * Keyboard::isOn(VK_LMENU);
+		modifiers += (1 << 2) * Keyboard::isOn(VK_LCONTROL);
+		modifiers += (1 << 3) * Keyboard::isOn(VK_LSHIFT);
+		modifiers += (1 << 4) * Keyboard::isOn(VK_RWIN);
+		modifiers += (1 << 5) * Keyboard::isOn(VK_RMENU);
+		modifiers += (1 << 6) * Keyboard::isOn(VK_RCONTROL);
+		modifiers += (1 << 7) * Keyboard::isOn(VK_RSHIFT);
 		return modifiers;
 	}
 }
