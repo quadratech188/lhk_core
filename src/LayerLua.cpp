@@ -1,4 +1,5 @@
 #include <array>
+#include <optional>
 #include <string>
 #include <format>
 
@@ -115,7 +116,7 @@ namespace LayerLua {
 
 		auto layer = Layers::get(layerUserdata->name);
 
-		std::array<int, 5> indexArray = KeyboardSubHook::getFilter(L, 2);
+		std::array<std::optional<int>, 5> indexArray = KeyboardSubHook::getFilter(L, 2);
 
 		SubHook subHook = SubHook(L, 3);
 

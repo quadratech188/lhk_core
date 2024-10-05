@@ -1,5 +1,6 @@
 #include "LuaHeader.h"
 #include <array>
+#include <optional>
 #include "KeyboardSubHook.h"
 #include "Dll.h"
 #include "KeyboardHook.h"
@@ -13,23 +14,23 @@
 namespace KeyboardSubHook {
 	AttributeTree<SubHook> subHooks;
 
-	std::array<int, 5> getFilter(lua_State* L, int index) {
+	std::array<std::optional<int>, 5> getFilter(lua_State* L, int index) {
 		luaL_argcheck(L, lua_istable(L, index), 1, NULL);
 		lua_getfield(L, index, "vkCode");
-		int vkCode = lua_isnumber(L, -1)? lua_tointeger(L, -1): 0;
+		std::optional<int> vkCode = lua_isnumber(L, -1)? std::optional<int>(lua_tointeger(L, -1)): std::nullopt;
 		lua_pop(L, 1);
 		lua_getfield(L, index, "scanCode");
-		int scanCode = lua_isnumber(L, -1)? lua_tointeger(L, -1): 0;
+		std::optional<int> scanCode = lua_isnumber(L, -1)? std::optional<int>(lua_tointeger(L, -1)): std::nullopt;
 		lua_pop(L, 1);
 		lua_getfield(L, index, "stroke");
-		int stroke = lua_isstring(L, -1)? Stroke(L, -1): 0;
+		std::optional<int> stroke = lua_isstring(L, -1)? std::optional<int>(Stroke(L, -1)): std::nullopt;
 		lua_pop(L, 1);
 		lua_getfield(L, index, "autorepeated");
-		int repeat = lua_isboolean(L, -1)? lua_toboolean(L, -1) + 1: 0; // 2 is when key is autorepeated (why would you want this), 
+		std::optional<int> repeat = lua_isboolean(L, -1)? std::optional<int>(lua_toboolean(L, -1) + 1): std::nullopt; // 2 is when key is autorepeated (why would you want this), 
 		lua_pop(L, 1);
 
 		lua_getfield(L, index, "modifiers");
-		int modifiers = Modifiers::createFromLua(L, -1);
+		std::optional<int> modifiers = Modifiers::createFromLua(L, -1);
 		lua_pop(L, 1); // Pop 'modifiers' table
 
 		return {vkCode, scanCode, modifiers, repeat, stroke};

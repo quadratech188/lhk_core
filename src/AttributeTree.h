@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
+#include <optional>
 #include <unordered_map>
 #include <forward_list>
 #include <span>
@@ -11,6 +13,7 @@ private:
 	
 	template <typename K>
 	struct AttributeNode {
+		std::unique_ptr<AttributeNode<K>> defaultNode;
 		std::unordered_map<int, AttributeNode<K>> nodes;
 		K value;
 	};
@@ -31,9 +34,8 @@ private:
 		if (it != currentNode.nodes.end()) {
 			callIncludingDefault(indexArray, func, currentIndex + 1, it->second);
 		}
-		auto defaultIt = currentNode.nodes.find(0);
-		if (defaultIt != currentNode.nodes.end()) {
-			callIncludingDefault(indexArray, func, currentIndex + 1, defaultIt->second);
+		if (currentNode.defaultNode != nullptr) {
+			callIncludingDefault(indexArray, func, currentIndex + 1, *currentNode.defaultNode);
 		}
 	}
 public:
@@ -41,14 +43,23 @@ public:
 		callIncludingDefault(indexArray, func, 0, root);
 	}
 
-	std::forward_list<T>& query(std::span<int> indexArray) {
+	std::forward_list<T>& query(std::span<std::optional<int>> indexArray) {
 		AttributeNodeType* node = &root;
 		for (const auto& it: indexArray) {
-			node = &node->nodes[it];
+			if (it.has_value()) {
+				node = &node->nodes[it.value()];
+			}
+			else {
+				if (node->defaultNode == nullptr) {
+					node->defaultNode = std::make_unique<AttributeNodeType>();
+				}
+				// Workaround
+				node = node->defaultNode.get();
+			}
 		}
 		return node->value;
 	}
-	void insert(std::span<int> indexArray, T data) {
+	void insert(std::span<std::optional<int>> indexArray, T data) {
 		query(indexArray).push_front(data);
 	}
 };

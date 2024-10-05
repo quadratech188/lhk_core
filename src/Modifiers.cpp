@@ -1,3 +1,4 @@
+#include <optional>
 #include <windows.h>
 #include <winuser.h>
 #include "LuaHeader.h"
@@ -16,9 +17,9 @@ namespace Modifiers {
 	Bit 7 | RCtrl
 	Bit 8 | RShift
 	*/
-	int createFromLua(lua_State* L, int index) {
+	std::optional<int> createFromLua(lua_State* L, int index) {
 		if (lua_isnil(L, index)) {
-			return 0;
+			return std::nullopt;
 		}
 
 		int modifiers = 1;

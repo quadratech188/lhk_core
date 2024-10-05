@@ -2,6 +2,7 @@
 
 #include <array>
 #include "LuaHeader.h"
+#include <optional>
 #include <variant>
 
 #include "AttributeTree.h"
@@ -19,6 +20,6 @@ namespace KeyboardSubHook {
 	
 	extern AttributeTree<SubHook> subHooks;
 	
-	std::array<int, 5> getFilter(lua_State* L, int index);
+	std::array<std::optional<int>, 5> getFilter(lua_State* L, int index);
 	std::variant<int, KeyStrokes> getActions(lua_State* L, int index);
 }
