@@ -10,22 +10,18 @@
 
 template <typename T> class AttributeTree {
 private:
-	
-	template <typename K>
 	struct AttributeNode {
-		std::unique_ptr<AttributeNode<K>> defaultNode;
-		std::unordered_map<int, AttributeNode<K>> nodes;
-		K value;
+		std::unique_ptr<AttributeNode> defaultNode;
+		std::unordered_map<int, AttributeNode> nodes;
+		std::optional<T> value;
 	};
 
-	typedef AttributeNode<std::forward_list<T>> AttributeNodeType;
+	AttributeNode root;
 
-	AttributeNodeType root;
-
-	void callIncludingDefault(std::span<int> indexArray, std::function<void(T)> func, int currentIndex, AttributeNodeType& currentNode) {
+	void callIncludingDefault(std::span<int> indexArray, std::function<void(T)> func, int currentIndex, AttributeNode& currentNode) {
 		if (indexArray.size() == currentIndex) {
-			for (auto& it: currentNode.value) {
-				func(it);
+			if (currentNode.value.has_value()) {
+				func(currentNode.value.value());
 			}
 			return;
 		}
@@ -43,23 +39,23 @@ public:
 		callIncludingDefault(indexArray, func, 0, root);
 	}
 
-	std::forward_list<T>& query(std::span<std::optional<int>> indexArray) {
-		AttributeNodeType* node = &root;
+	T& operator[](std::span<std::optional<int>> indexArray) {
+		AttributeNode* node = &root;
 		for (const auto& it: indexArray) {
 			if (it.has_value()) {
 				node = &node->nodes[it.value()];
 			}
 			else {
 				if (node->defaultNode == nullptr) {
-					node->defaultNode = std::make_unique<AttributeNodeType>();
+					node->defaultNode = std::make_unique<AttributeNode>();
 				}
 				// Workaround
 				node = node->defaultNode.get();
 			}
 		}
-		return node->value;
-	}
-	void insert(std::span<std::optional<int>> indexArray, T data) {
-		query(indexArray).push_front(data);
+		if (!node->value.has_value()) {
+			node->value.emplace();
+		}
+		return node->value.value();
 	}
 };

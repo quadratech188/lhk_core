@@ -14,6 +14,7 @@ namespace KeyboardSubHook {
 		std::variant<int, KeyStrokes> data;
 		Flags flags;
 		void run();
+		SubHook(): data(0), flags(Flags()) {};
 		SubHook(lua_State* L, int index);
 		SubHook(std::variant<int, KeyStrokes> data, Flags flags): flags(flags), data(data) {};
 	};

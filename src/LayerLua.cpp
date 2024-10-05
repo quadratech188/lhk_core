@@ -120,7 +120,7 @@ namespace LayerLua {
 
 		SubHook subHook = SubHook(L, 3);
 
-		layer->subHooks.insert(indexArray, subHook);
+		layer->subHooks[indexArray] = subHook;
 
 		return 0;
 	}
