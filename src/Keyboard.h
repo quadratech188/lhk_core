@@ -1,9 +1,9 @@
 #pragma once
 
 #include <windows.h>
-#include "LuaHeader.h"
-#include <span>
+
 #include "KeyStroke.h"
+#include "LuaHeader.h"
 
 namespace Keyboard {
 	extern BYTE keyboardState[256];

@@ -1,11 +1,12 @@
-#include <string>
-#include <format>
-#include <windows.h>
-
-#include "LuaHeader.h"
-#include "KeyStroke.h"
 #include "KeyStrokeLua.h"
+
 #include "Definitions.h"
+#include <format>
+#include <string>
+
+#include <windows.h>
+#include "KeyStroke.h"
+#include "LuaHeader.h"
 
 namespace KeyStrokeLua {
 	const char* userdataName = "lhk.KeyStroke";

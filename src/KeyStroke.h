@@ -1,7 +1,8 @@
 #pragma once
 
-#include <windows.h>
 #include <span>
+
+#include <windows.h>
 
 #include "LuaHeader.h"
 #include "Stroke.h"

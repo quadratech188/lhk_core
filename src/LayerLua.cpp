@@ -1,16 +1,15 @@
-#include <array>
-#include <optional>
-#include <string>
-#include <format>
-
-#include "KeyboardSubHook.h"
-#include "LuaHeader.h"
-
 #include "LayerLua.h"
 
+#include <array>
+#include <format>
+#include <optional>
+#include <string>
+
 #include "Definitions.h"
-#include "LuaHeader.h"
+#include "KeyboardSubHook.h"
 #include "Layers.h"
+#include "LuaHeader.h"
+#include "LuaHeader.h"
 
 using namespace KeyboardSubHook;
 

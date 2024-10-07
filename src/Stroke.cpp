@@ -1,7 +1,8 @@
+#include "Stroke.h"
+
 #include <stdexcept>
 #include <string>
 
-#include "Stroke.h"
 #include "KeyboardHook.h"
 
 Stroke::Stroke(lua_State* L, int index) {

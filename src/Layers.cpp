@@ -1,9 +1,9 @@
+#include "Layers.h"
+
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <memory>
-
-#include "Layers.h"
 
 #include "LuaHeader.h"
 

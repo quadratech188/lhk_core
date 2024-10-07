@@ -1,13 +1,13 @@
 #pragma once
 
 #include <array>
-#include "LuaHeader.h"
 #include <optional>
 #include <variant>
 
 #include "AttributeTree.h"
-#include "KeyStroke.h"
 #include "Flags.h"
+#include "KeyStroke.h"
+#include "LuaHeader.h"
 
 namespace KeyboardSubHook {
 	struct SubHook {

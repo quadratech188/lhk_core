@@ -1,10 +1,11 @@
+#include "KeyboardHook.h"
+
 #include <windows.h>
 
-#include "KeyboardSubHook.h"
 #include "KeyStroke.h"
-#include "KeyboardHook.h"
-#include "Modifiers.h"
+#include "KeyboardSubHook.h"
 #include "Layers.h"
+#include "Modifiers.h"
 
 using namespace KeyboardSubHook;
 

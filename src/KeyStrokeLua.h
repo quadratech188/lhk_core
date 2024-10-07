@@ -1,6 +1,5 @@
-#include "LuaHeader.h"
-#include "windows.h"
 #include "KeyStroke.h"
+#include "LuaHeader.h"
 
 namespace KeyStrokeLua {
 	void open(lua_State* L);

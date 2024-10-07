@@ -1,8 +1,9 @@
 #include <optional>
+
 #include <windows.h>
-#include <winuser.h>
-#include "LuaHeader.h"
+
 #include "Keyboard.h"
+#include "LuaHeader.h"
 #include "Modifiers.h"
 
 namespace Modifiers {

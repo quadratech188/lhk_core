@@ -1,14 +1,17 @@
-#include "LuaHeader.h"
-#include <array>
-#include <optional>
 #include "KeyboardSubHook.h"
+
+#include <array>
+#include <iostream>
+#include <optional>
+
 #include "Dll.h"
-#include "KeyboardHook.h"
-#include "Modifiers.h"
-#include "Keyboard.h"
 #include "Flags.h"
 #include "KeyStrokeLua.h"
+#include "Keyboard.h"
+#include "KeyboardHook.h"
 #include "LayerLua.h"
+#include "LuaHeader.h"
+#include "Modifiers.h"
 #include "Stroke.h"
 
 namespace KeyboardSubHook {

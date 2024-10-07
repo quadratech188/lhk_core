@@ -1,14 +1,14 @@
-#include "LuaHeader.h"
+#include "Keyboard.h"
 
-#include <windows.h>
 #include <span>
 #include <stdexcept>
 #include <string>
-#include <winuser.h>
 
-#include "Keyboard.h"
-#include "KeyboardHook.h"
+#include <windows.h>
+
 #include "KeyStroke.h"
+#include "KeyboardHook.h"
+#include "LuaHeader.h"
 
 namespace Keyboard {
 	BYTE keyboardState[256];

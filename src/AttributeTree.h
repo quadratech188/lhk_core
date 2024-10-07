@@ -1,12 +1,10 @@
 #pragma once
 
-#include <iostream>
+#include <functional>
 #include <memory>
 #include <optional>
-#include <unordered_map>
-#include <forward_list>
 #include <span>
-#include <functional>
+#include <unordered_map>
 
 template <typename T> class AttributeTree {
 private:

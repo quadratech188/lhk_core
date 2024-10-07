@@ -1,11 +1,11 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 #include "AttributeTree.h"
 #include "KeyboardSubHook.h"
-#include <unordered_map>
 
 namespace Layers {
 	struct Layer {
