@@ -1,7 +1,7 @@
 package = "lhk_core"
 version = "scm-1"
 source = {
-	url = "git://github.com/quadratech188/LuaHotKey",
+	url = "git://github.com/quadratech188/lhk_core",
 	branch = "main"
 }
 description = {
