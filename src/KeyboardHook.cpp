@@ -39,7 +39,7 @@ namespace KeyboardHook {
 							(int)keyStroke.stroke};
 			
 		for (auto& layerIt: Layers::activatedLayers) {
-			layerIt.second->subHooks.callIncludingDefault(indexArray, [](SubHook subHook) {subHook.run();});
+			layerIt.second->second.subHooks.callIncludingDefault(indexArray, [](SubHook subHook) {subHook.run();});
 		}
 
 		prevKeyStroke = keyStroke;

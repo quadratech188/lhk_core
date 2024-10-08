@@ -3,13 +3,12 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
-#include <memory>
 
 #include "LuaHeader.h"
 
 namespace Layers {
-	std::unordered_map<std::string, std::shared_ptr<Layer>> layers;
-	std::unordered_map<std::string, std::shared_ptr<Layer>> activatedLayers;
+	std::unordered_map<std::string, Layer> layers;
+	std::unordered_map<std::string, LayerIt> activatedLayers;
 
 	bool exists(std::string name) {
 		auto layer = layers.find(name);
@@ -28,22 +27,22 @@ namespace Layers {
 			throw std::runtime_error("Key already exists");
 		}
 
-		layers[name] = std::make_shared<Layer>();
+		layers[name] = Layer();
 	}
 
-	std::shared_ptr<Layer> get(std::string name) {
+	LayerIt get(std::string name) {
 		auto layer = layers.find(name);
 		if (layer == layers.end()) {
 			throw std::runtime_error("Key not found");
 		}
 				
-		return layer->second;
+		return layer;
 	}
 
 	void activate(std::string name) {
-		std::shared_ptr<Layer> layer = get(name);
+		auto layer = get(name);
 
-		layer->activated = true;
+		layer->second.activated = true;
 
 		activatedLayers[name] = layer;
 	}
@@ -55,7 +54,7 @@ namespace Layers {
 			throw std::runtime_error("Key not found");
 		}
 
-		layer->second->activated = false;
+		layer->second->second.activated = false;
 
 		activatedLayers.erase(layer);
 	}

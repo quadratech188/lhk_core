@@ -113,13 +113,13 @@ namespace LayerLua {
 		
 		luaL_argcheck(L, Layers::exists(layerUserdata->name), 1, std::format("Layer '{}' does not exist", layerUserdata->name).c_str());
 
-		auto layer = Layers::get(layerUserdata->name);
+		Layers::LayerIt layer = Layers::get(layerUserdata->name);
 
 		std::array<std::optional<int>, 5> indexArray = KeyboardSubHook::getFilter(L, 2);
 
 		SubHook subHook = SubHook(L, 3);
 
-		layer->subHooks[indexArray] = subHook;
+		layer->second.subHooks[indexArray] = subHook;
 
 		return 0;
 	}
