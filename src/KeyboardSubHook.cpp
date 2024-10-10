@@ -63,6 +63,8 @@ namespace KeyboardSubHook {
 		}
 		else {
 			luaL_argcheck(L, 0, index, "Expected KeyStroke array or lua function");
+			// Make the compiler happy
+			return 0;
 		}
 	}
 
